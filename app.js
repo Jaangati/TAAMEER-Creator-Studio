@@ -210,7 +210,8 @@ function renderMessages(){
  const sources=(m.sources||[]).map(x=>{const url=safeSource(x.url);return url?'<a class="answer-source" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'"><span class="source-index">['+Number(x.number||1)+']</span> '+esc(x.title)+'</a>':''}).filter(Boolean).join('');
  const options=!m.pending&&m.creativeOptions?m.creativeOptions:(!m.pending&&/idea|reel|hook|concept|options|directions/i.test(m.body)?extractCreativeOptions(m.body):[]);
  const choices=options.length?'<div class="creative-choices"><div class="choice-heading">Choose a direction to develop</div>'+options.map(opt=>'<button class="choice-button" data-select-option="'+i+':'+opt.number+'"><span class="choice-number">'+opt.number+'</span><span>'+esc(opt.title)+'</span><span class="choice-arrow">→</span></button>').join('')+'</div>':'';
- const footer=m.pending?'<span class="thinking-dots">Working on it…</span>':choices+'<div class="answer-actions"><button data-copy="'+i+'">Copy</button><button data-save="'+i+'">Save</button><button data-follow="Make it shorter">Shorter</button><button data-follow="Try another version">Another version</button></div>';
+ const develop=m.selectedOption?'<div class="selected-followups"><span>Continue with idea '+Number(m.selectedOption.number)+'</span><button data-follow="Make this selected idea shorter">15-second version</button><button data-follow="Try another stronger hook for this selected idea">Stronger hook</button></div>':'';
+ const footer=m.pending?'<span class="thinking-dots">Working on it…</span>':choices+develop+'<div class="answer-actions"><button data-copy="'+i+'">Copy</button><button data-save="'+i+'">Save</button><button data-follow="Make it shorter">Shorter</button><button data-follow="Try another version">Another version</button></div>';
  return'<div class="message"><div class="assistant-symbol"><img src="'+mark+'" alt="TAAMEER"></div><div class="answer"><div class="answer-text">'+fmt(m.body)+'</div>'+(sources?'<div class="answer-sources"><div class="source-title">Sources · Verified reference library</div>'+sources+'</div>':'')+footer+'</div></div>';
  }).join('');
  const sc=$('scroll');sc.scrollTop=sc.scrollHeight;
@@ -249,12 +250,14 @@ async function send(preset,selectedOption=null){
  const thread=state.threadId;state.loading=true;
  state.messages.push({me:true,body:q});
  if(field){field.value='';field.focus()}
+ const latestSelected=state.messages.slice(0,-1).reverse().find(m=>!m.me&&m.selectedOption)?.selectedOption||null;
+ const carriedSelection=selectedOption||(/(?:shorter|shorten|stronger|another|different|version|اختصر|أقصر)/i.test(q)?latestSelected:null);
  const history=state.messages.slice(-18).map(m=>({role:m.me?'user':'assistant',content:m.body}));
  state.messages.push({me:false,body:'',pending:true});
  renderMessages();renderTags();
  try{
-   const res=await request('chat',{question:q,messages:history,selected_option:selectedOption});
-   if(state.threadId===thread)state.messages[state.messages.length-1]={me:false,body:res.text||'No response returned.',sources:res.sources||[],creativeOptions:res.creative_options||[],engine:res.engine||'verified_rules'};
+   const res=await request('chat',{question:q,messages:history,selected_option:carriedSelection});
+   if(state.threadId===thread)state.messages[state.messages.length-1]={me:false,body:res.text||'No response returned.',sources:res.sources||[],creativeOptions:res.creative_options||[],selectedOption:res.selected_option||null,engine:res.engine||'verified_rules'};
  }catch(e){
    if(state.threadId===thread)state.messages[state.messages.length-1]={me:false,body:'The knowledge service is temporarily unavailable. Please retry. I cannot verify project facts offline.'};
  }finally{
