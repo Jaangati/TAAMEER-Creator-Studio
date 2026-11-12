@@ -197,6 +197,7 @@ async function loadReelReferences(){
 }
 function verifiedThumbnail(url){
  if(!url)return '';
+ if(url.startsWith('assets/reel-covers/')&&/^[0-9]{15,21}[.]jpg$/.test(url.slice('assets/reel-covers/'.length)))return url;
  try{const u=new URL(url);return u.protocol==='https:'&&['p16-sign.tiktokcdn-us.com','p16-sign-va.tiktokcdn.com','p19-sign.tiktokcdn-us.com','p16-sign-sg.tiktokcdn.com','www.tiktok.com','images.unsplash.com'].includes(u.hostname)?u.href:''}catch{return ''}
 }
 const referenceTagMeta={
@@ -270,7 +271,8 @@ function resetTikTokPlayer(host){
  const link=reelReferences.find(x=>x.tiktok_video_id===videoId)?.url||'https://www.tiktok.com/';
  host.dataset.loaded='false';
  host.classList.remove('is-playing');
- host.innerHTML='<div class="reference-loading-poster"><button class="reference-play-btn" data-play-video="'+videoId+'" aria-label="Play TikTok reel"><span class="reference-loading-play">▶</span><strong>Play reel</strong><small>Tap to load TikTok video</small></button><a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">Open on TikTok ↗</a></div>';
+ const poster=verifiedThumbnail(host.dataset.poster);
+ host.innerHTML=(poster?'<img class="reference-poster-image" src="'+esc(poster)+'" alt="Reel cover" loading="lazy">':'')+'<div class="reference-loading-poster '+(poster?'has-cover':'')+'"><button class="reference-play-btn" data-play-video="'+videoId+'" aria-label="Play TikTok reel"><span class="reference-loading-play">▶</span><strong>Play reel</strong></button><a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">Open on TikTok ↗</a></div>';
 }
 function setupProgressiveReelPlayers(){
  // No autoplay, no scroll-triggered iframes, no observer — explicit user action only.
@@ -287,10 +289,11 @@ function renderReferenceCards(){
   const videoId=String(r.tiktok_video_id||'');
   const validTikTokId=/^[0-9]{15,21}$/.test(videoId)&&r.platform==='TikTok';
   const image=thumb?'<img loading="lazy" alt="Original reel cover image" src="'+esc(thumb)+'">':'<span class="reference-graphic"><span class="reference-graphic-icon">▶</span><small>Preview loads when visible</small></span>';
-  const media=validTikTokId?'<div class="reference-thumb reference-thumb-player reference-player-waiting" data-video-id="'+esc(videoId)+'" data-title="'+esc(r.title)+'"><div class="reference-loading-poster"><button class="reference-play-btn" data-play-video="'+videoId+'" aria-label="Play '+esc(r.title)+'"><span class="reference-loading-play">▶</span><strong>Play reel</strong><small>Tap to load TikTok video</small></button><a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Open on TikTok ↗</a></div></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
+  const media=validTikTokId?'<div class="reference-thumb reference-thumb-player reference-player-waiting" data-video-id="'+esc(videoId)+'" data-title="'+esc(r.title)+'" data-poster="'+esc(thumb)+'">'+(thumb?'<img class="reference-poster-image" src="'+esc(thumb)+'" alt="Cover for '+esc(r.title)+'" loading="lazy">':'')+'<div class="reference-loading-poster '+(thumb?'has-cover':'')+'"><button class="reference-play-btn" data-play-video="'+videoId+'" aria-label="Play '+esc(r.title)+'"><span class="reference-loading-play">▶</span><strong>Play reel</strong></button><a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Open on TikTok ↗</a></div></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
   const detail=r.description&& !/original tiktok video reference shared by/i.test(r.description)?r.description:'A TAAMEER Marketing reference. Open the original reel to explore its format and filming style.';
   return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.filter(t=>t!=='TikTok'&&t!=='Reel Inspiration').map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a>'+(validTikTokId?'<button class="reference-retry" data-reload-video="'+videoId+'" title="Reload the TikTok embed if it fails">↻ Retry player</button>':'')+'</div></div></article>';
  }).join(''):'<p class="references-empty">No references match your search or selected tag.</p>';
+ target.querySelectorAll('.reference-poster-image').forEach(img=>img.addEventListener('error',()=>img.remove()));
  setupProgressiveReelPlayers();
 }
 function safeSource(url){try{const u=new URL(url);return u.protocol==="https:"&&/^(?:[\w-]+\.)*(?:gov\.qa|lusail\.com|qetaifanprojects\.com|udcqatar\.com|thepeninsulaqatar\.com)$/.test(u.hostname)?u.href:""}catch{return ""}}
