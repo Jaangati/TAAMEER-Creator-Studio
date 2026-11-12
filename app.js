@@ -6,6 +6,7 @@ const logo='assets/taameer-logo.svg';
 const mark='assets/taameer-mark.svg';
 let activeModule='brain',chatPanelOpen=true;
 let reelReferences=[],referenceStatus='idle',referenceSearch='',referenceTag='All';
+let referenceObserver=null,referenceQueue=[],referenceQueueActive=false,referenceRenderVersion=0;
 const maxIdle=8*60*60*1000;
 const initialProjects=[
 {slug:'general',name:'Qatar Real Estate',location:'Qatar',facts:['Educational real estate content. Verify all financial claims.']},
@@ -201,6 +202,9 @@ function verifiedThumbnail(url){
 const referenceTagMeta={
  'TikTok':{icon:'▶',tone:'charcoal'},
  'Reel Inspiration':{icon:'✦',tone:'neutral'},
+ 'Personal Branding':{icon:'◉',tone:'violet'},
+ 'Talking to Camera':{icon:'▣',tone:'indigo'},
+ 'Property Detail':{icon:'◇',tone:'teal'},
  'Indoor':{icon:'▣',tone:'neutral'},
  'Outdoor':{icon:'☀',tone:'blue'},
  'Showroom':{icon:'⌂',tone:'gold'},
@@ -234,8 +238,60 @@ function renderReferenceLibrary(){
  const input=$('reference-search');if(input)input.oninput=ev=>{referenceSearch=ev.target.value;renderReferenceCards()};
  renderReferenceCards();
 }
+function clearReferenceObserver(){
+ if(referenceObserver){referenceObserver.disconnect();referenceObserver=null}
+ referenceQueue=[];referenceQueueActive=false;referenceRenderVersion++;
+}
+function mountTikTokPlayer(host){
+ if(!host?.isConnected||host.dataset.loaded==='true'||activeModule!=='toolkit')return;
+ const videoId=host.dataset.videoId||'';
+ if(!/^[0-9]{15,21}$/.test(videoId))return;
+ const iframe=document.createElement('iframe');
+ iframe.width='325';iframe.height='578';iframe.loading='lazy';
+ iframe.title=host.dataset.title||'TikTok reel reference';
+ iframe.setAttribute('frameborder','0');
+ iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share');
+ iframe.setAttribute('allowfullscreen','');
+ iframe.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+ // Don't autoplay fifteen third-party players: this reduces simultaneous requests, CPU and rate-limit failures.
+ iframe.src='https://www.tiktok.com/player/v1/'+videoId+'?music_info=1&description=1&autoplay=0&muted=1&embed_from=embed_page';
+ host.dataset.loaded='true';host.replaceChildren(iframe);
+}
+function scheduleTikTokPlayer(host){
+ if(!host||host.dataset.loaded==='true'||host.dataset.queued==='true')return;
+ host.dataset.queued='true';
+ referenceQueue.push(host);
+ if(!referenceQueueActive)nextReferencePlayer();
+}
+function nextReferencePlayer(){
+ if(referenceQueueActive||!referenceQueue.length)return;
+ referenceQueueActive=true;
+ const version=referenceRenderVersion;
+ const step=()=>{
+  if(version!==referenceRenderVersion){referenceQueueActive=false;return}
+  const host=referenceQueue.shift();
+  if(host?.isConnected){host.dataset.queued='false';mountTikTokPlayer(host)}
+  if(referenceQueue.length){setTimeout(step,2100)}
+  else referenceQueueActive=false;
+ };
+ step();
+}
+function setupProgressiveReelPlayers(){
+ if(referenceObserver)referenceObserver.disconnect();
+ const hosts=[...document.querySelectorAll('.reference-thumb-player[data-video-id]')];
+ if(!hosts.length)return;
+ // Only load video players near the visible library viewport, with staggered requests.
+ if(typeof IntersectionObserver==='undefined'){hosts.slice(0,2).forEach(scheduleTikTokPlayer);return}
+ referenceObserver=new IntersectionObserver(entries=>{
+  for(const entry of entries){
+   if(entry.isIntersecting){referenceObserver.unobserve(entry.target);scheduleTikTokPlayer(entry.target)}
+  }
+ },{root:$('scroll')||null,rootMargin:'100px 0px 160px 0px',threshold:0.01});
+ hosts.forEach(el=>referenceObserver.observe(el));
+}
 function renderReferenceCards(){
  const target=$('reference-results');if(!target)return;
+ clearReferenceObserver();
  if(referenceStatus==='loading'){target.innerHTML='<p class="references-empty">Loading references…</p>';return}
  if(referenceStatus==='error'){target.innerHTML='<p class="references-empty">The reference library could not load. Please refresh and try again.</p>';return}
  const q=referenceSearch.trim().toLowerCase();
@@ -244,11 +300,12 @@ function renderReferenceCards(){
   const thumb=verifiedThumbnail(r.thumbnail_url);
   const videoId=String(r.tiktok_video_id||'');
   const validTikTokId=/^[0-9]{15,21}$/.test(videoId)&&r.platform==='TikTok';
-  const image=thumb?'<img loading="lazy" alt="Original reel cover image" src="'+esc(thumb)+'">':'<span class="reference-graphic"><span class="reference-graphic-icon">▶</span><small>OPEN ORIGINAL VIDEO</small></span>';
-  const media=validTikTokId?'<div class="reference-thumb reference-thumb-player"><iframe height="578" width="325" src="https://www.tiktok.com/player/v1/'+videoId+'?music_info=1&description=1&autoplay=1&muted=1&embed_from=embed_page" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="'+esc(r.title)+'" allowfullscreen loading="lazy"></iframe></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
-  const detail=r.description&& !/original tiktok video reference shared by/i.test(r.description)?r.description:'A reference selected by TAAMEER Marketing. Open the original video to see the format and filming style.';
-  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">SELECTED REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a></div></div></article>';
+  const image=thumb?'<img loading="lazy" alt="Original reel cover image" src="'+esc(thumb)+'">':'<span class="reference-graphic"><span class="reference-graphic-icon">▶</span><small>Preview loads when visible</small></span>';
+  const media=validTikTokId?'<div class="reference-thumb reference-thumb-player reference-player-waiting" data-video-id="'+esc(videoId)+'" data-title="'+esc(r.title)+'"><div class="reference-loading-poster"><span class="reference-loading-play">▶</span><small>Loading TikTok preview…</small><a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Open original ↗</a></div></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
+  const detail=r.description&& !/original tiktok video reference shared by/i.test(r.description)?r.description:'A TAAMEER Marketing reference. Open the original reel to explore its format and filming style.';
+  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a></div></div></article>';
  }).join(''):'<p class="references-empty">No references match your search or selected tag.</p>';
+ setupProgressiveReelPlayers();
 }
 function safeSource(url){try{const u=new URL(url);return u.protocol==="https:"&&/^(?:[\w-]+\.)*(?:gov\.qa|lusail\.com|qetaifanprojects\.com|udcqatar\.com|thepeninsulaqatar\.com)$/.test(u.hostname)?u.href:""}catch{return ""}}
 function fmt(s){return esc(s).replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>')}
