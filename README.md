@@ -1,23 +1,34 @@
 # TAAMEER Creator Studio
 
-Internal sales content dashboard with authenticated Supabase-backed agent accounts, rule-based Creator Brain, script writing, reel ideas, knowledge base, planner, saved content, teleprompter, and Marketing overview.
+Mobile-first internal content production dashboard for TAAMEER Sales, including Creator Brain, hook and script generation, teleprompter, project knowledge, saved content and content planning.
 
-## Live hosting
+## Deployment
 
-The production entry point is deployed as a Supabase Edge Function: https://hylcxekemqttsyfnsiov.supabase.co/functions/v1/creator-studio
+- Hosted application: https://hylcxekemqttsyfnsiov.supabase.co/functions/v1/creator-studio
+- Supabase project: hylcxekemqttsyfnsiov
+- Frontend source: index.html
+- Production hosting: Supabase Edge Function named creator-studio
+- GitHub Pages: not configured
 
-The GitHub repository contains the application HTML. GitHub Pages is not configured and must not be assumed private merely because this repository is private.
+## Access model
 
-## Access
+Sales team uses one **shared password** entered on the dashboard login screen. The password is validated by the Supabase Edge Function against a salted SHA-256 hash in `sales_access_settings`. The actual password is not stored in this repository.
 
-Provision users in Supabase Authentication. Restrict open registration. Create a profile for each user in the SQL editor (using real UUID from auth.users):
+Sales content is shared, not individually attributed. Content is saved to `sales_content` through the server-side endpoint only. Both tables have RLS enabled and no anonymous Data API access. Service-role credentials belong exclusively to the Supabase Edge Function runtime.
 
-\`\`\`sql
-insert into public.profiles(id,display_name,role) values ('REPLACE_UUID','Approved User','agent');
-\`\`\`
+Marketing admin sign-in uses Supabase Authentication with a separately provisioned user and `profiles.role = 'admin'`. No Marketing admin account has been created yet.
 
-For Marketing administrators use role \`admin\`. Agent-created content belongs to that account through Postgres RLS. Do not put a service-role key in the browser.
+## Known limitations
 
-## Production caveats
+- The content engine is deterministic and template-driven; this is not a live LLM.
+- Initial TAAMEER facts require Marketing approval before public use.
+- Arabic-native script production, visual video editing, advanced admin editing and automatic GitHub-to-Supabase deployment are not implemented.
+- Publishing this repository publicly exposes its *source code*, not the protected password or database records.
+- Updating index.html on GitHub does not automatically redeploy the hosted Supabase Edge Function.
+- Shared passwords cannot provide per-agent attribution or revocation. Rotate the password if a team member should lose access.
 
-Rule-based, not generative AI. Sample projects are minimal and need Marketing approval. Arabic translation and video editing are not implemented. Admin editing currently uses the protected Supabase dashboard. If the front-end code changes in GitHub it must be redeployed to the Supabase Edge Function. A CI deployment pipeline is a subsequent enhancement.
+## Administration
+
+Create the Marketing admin user in Supabase Authentication, then give that user's UUID a row in `profiles` with role `admin`. Do not grant admin privileges in client-editable user metadata. Set Auth signups to invite-only.
+
+The web app is hosted publicly at its URL, but dashboard content actions require password verification.
