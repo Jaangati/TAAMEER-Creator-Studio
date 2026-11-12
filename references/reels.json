@@ -1,7 +1,7 @@
 {
   "name": "TAAMEER Agents Studio — Reel Reference Library",
   "version": 1,
-  "notes": "Marketing-curated external examples. Only attach thumbnails, creative descriptions, production difficulty and topic tags after the original video has been inspected. Never copy an external creator's video or script verbatim.",
+  "notes": "Marketing-curated video inspiration. Reference links are published upon user confirmation; filming environment, camera setup, content format and difficulty are tagged only after actual review of the original footage. No separate approval process is used.",
   "references": [
     {
       "id": "tiktok-zspd7u3jx",
@@ -12,20 +12,20 @@
       "thumbnail_url": null,
       "creator": "@hossam_allam__",
       "duration_seconds": null,
-      "tags": [
-        "TikTok",
-        "Video reference",
-        "Pending content review"
-      ],
-      "review_status": "pending_review",
-      "difficulty": "Not assessed",
-      "format": "To be confirmed",
-      "creative_notes": "Original TikTok link and video ID have been verified. Content-specific format, hook and ease-of-filming tags await direct review.",
+      "tags": [],
+      "difficulty": null,
+      "format": null,
+      "creative_notes": "Original video link verified. Filming setup and content characteristics not yet assessed; no guesses applied.",
       "added_on": "2026-11-12",
       "source": "Marketing submission",
       "tiktok_video_id": "7660660373145586962",
       "canonical_url": "https://www.tiktok.com/@hossam_allam__/video/7660660373145586962",
-      "preview_type": "official_tiktok_embed"
+      "preview_type": "official_tiktok_embed",
+      "publication_status": "published",
+      "analysis_status": "not_yet_analyzed",
+      "filming_environment": null,
+      "camera_setup": null,
+      "content_type": null
     },
     {
       "id": "tiktok-zspd7ypwe",
@@ -36,20 +36,20 @@
       "thumbnail_url": null,
       "creator": "@dxb1realestate",
       "duration_seconds": null,
-      "tags": [
-        "TikTok",
-        "Video reference",
-        "Pending content review"
-      ],
-      "review_status": "pending_review",
-      "difficulty": "Not assessed",
-      "format": "To be confirmed",
-      "creative_notes": "Original TikTok link and video ID have been verified. Content-specific format, hook and ease-of-filming tags await direct review.",
+      "tags": [],
+      "difficulty": null,
+      "format": null,
+      "creative_notes": "Original video link verified. Filming setup and content characteristics not yet assessed; no guesses applied.",
       "added_on": "2026-11-12",
       "source": "Marketing submission",
       "tiktok_video_id": "7601890111059496213",
       "canonical_url": "https://www.tiktok.com/@dxb1realestate/video/7601890111059496213",
-      "preview_type": "official_tiktok_embed"
+      "preview_type": "official_tiktok_embed",
+      "publication_status": "published",
+      "analysis_status": "not_yet_analyzed",
+      "filming_environment": null,
+      "camera_setup": null,
+      "content_type": null
     },
     {
       "id": "tiktok-zspd7fcrs",
@@ -60,20 +60,20 @@
       "thumbnail_url": null,
       "creator": "@walid_alzarooni",
       "duration_seconds": null,
-      "tags": [
-        "TikTok",
-        "Video reference",
-        "Pending content review"
-      ],
-      "review_status": "pending_review",
-      "difficulty": "Not assessed",
-      "format": "To be confirmed",
-      "creative_notes": "Original TikTok link and video ID have been verified. Content-specific format, hook and ease-of-filming tags await direct review.",
+      "tags": [],
+      "difficulty": null,
+      "format": null,
+      "creative_notes": "Original video link verified. Filming setup and content characteristics not yet assessed; no guesses applied.",
       "added_on": "2026-11-12",
       "source": "Marketing submission",
       "tiktok_video_id": "7605991997064760594",
       "canonical_url": "https://www.tiktok.com/@walid_alzarooni/video/7605991997064760594",
-      "preview_type": "official_tiktok_embed"
+      "preview_type": "official_tiktok_embed",
+      "publication_status": "published",
+      "analysis_status": "not_yet_analyzed",
+      "filming_environment": null,
+      "camera_setup": null,
+      "content_type": null
     }
   ]
 }
