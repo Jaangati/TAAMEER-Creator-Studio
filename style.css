@@ -164,3 +164,9 @@
  .tagstrip .chip{font-size:10px;padding:8px 10px}
  .side{display:flex}
 }
+
+.thread-row{overflow:visible}
+.thread-popover{position:absolute;z-index:40;right:3px;top:32px;min-width:116px;padding:5px;background:#fff;border:1px solid #dde1e5;border-radius:10px;box-shadow:0 12px 35px #20242a1f}
+.thread-popover button{display:block;width:100%;border:0;background:none;text-align:left;padding:9px 11px;border-radius:7px;font-size:11px;color:#484d54}
+.thread-popover button:hover{background:#f1f2f4}
+.thread-popover button[data-delete]{color:#a44040}
