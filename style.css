@@ -268,3 +268,43 @@
 .reel-film p{font-size:12px;line-height:1.75;margin:0}
 .reel-output+.answer-sources{margin-top:8px}
 @media(max-width:620px){.reel-output{gap:12px}.spoken-header{padding:12px 13px 10px}.spoken-script{padding:16px;font-size:16px}.reel-output h3{font-size:18px}}
+
+/* Marketing-curated reel reference gallery */
+.references-page{max-width:1120px;margin:0 auto;padding:34px 22px 60px}
+.agents-layout .chat-inner:has(.references-page){width:100%;max-width:1200px;padding:0 14px}
+.references-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:26px}
+.references-heading h1{font-size:clamp(25px,3vw,35px);letter-spacing:-.057em;font-weight:760;margin:11px 0 9px;color:#24282d}
+.references-heading p:not(.module-kicker){max-width:640px;color:#828a92;font-size:12px;line-height:1.9;margin:0}
+.reference-count{border:1px solid #e1e5e8;border-radius:999px;padding:8px 12px;white-space:nowrap;color:#697079;font-size:11px;font-weight:700;margin-top:20px}
+.reference-toolbar{display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+.reference-search{display:flex;align-items:center;gap:9px;max-width:430px;border:1px solid #e0e4e8;padding:0 13px;color:#9098a0;background:#fff;border-radius:11px}
+.reference-search input{border:none;outline:none;box-shadow:none;width:100%;padding:12px 0;font-size:12px;color:#3b4046;background:transparent}
+.reference-filters{display:flex;align-items:center;gap:7px;overflow-x:auto;scrollbar-width:thin;padding-bottom:3px}
+.reference-filter{flex:none;background:#fff;border:1px solid #e2e5e8;border-radius:20px;padding:8px 13px;font-size:11px;font-weight:600;color:#737b83}
+.reference-filter:hover{background:#f4f5f6}
+.reference-filter.active{background:#3b3e40;border-color:#3b3e40;color:#fff}
+.reference-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.reference-card{border:1px solid #e6e8eb;border-radius:15px;overflow:hidden;background:white;display:flex;flex-direction:column;min-width:0;box-shadow:0 5px 18px #141d2508;transition:transform .2s,box-shadow .2s}
+.reference-card:hover{transform:translateY(-2px);box-shadow:0 12px 27px #141d2510}
+.reference-thumb{aspect-ratio:9/11;position:relative;overflow:hidden;background:linear-gradient(145deg,#43464a,#222529);display:flex;align-items:center;justify-content:center}
+.reference-thumb>img{height:100%;width:100%;object-fit:cover}
+.reference-platform{position:absolute;top:13px;left:13px;font-size:10px;font-weight:750;background:#fff;color:#33383e;padding:7px 10px;border-radius:7px;box-shadow:0 2px 8px #0002}
+.reference-placeholder{height:100%;width:100%;display:flex;justify-content:center;align-items:center;gap:11px;flex-direction:column;background:radial-gradient(ellipse at 48% 37%,#62666c 0%,#383b40 47%,#272a2d 100%);color:#f5f5f5}
+.reference-placeholder-mark{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;border:1px solid #ffffff60;font-size:23px;padding-left:4px;background:#ffffff12}
+.reference-placeholder span{font-size:10px;font-weight:800;letter-spacing:.16em}
+.reference-placeholder small{font-size:10px;color:#c0c3c6}
+.reference-info{padding:19px 18px 17px;display:flex;flex-direction:column;flex:1;gap:9px}
+.reference-card-meta{font-size:10px;color:#9a9fa5}
+.reference-info h2{font-size:17px;line-height:1.4;letter-spacing:-.035em;color:#30343a;margin:0}
+.reference-info p{font-size:11px;line-height:1.7;color:#878e95;margin:0 0 4px}
+.reference-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+.reference-tags span{background:#f0f2f4;border-radius:7px;padding:6px 8px;color:#676f77;font-size:10px;font-weight:600}
+.reference-actions{border-top:1px solid #eceef0;margin-top:9px;padding-top:14px}
+.reference-open{display:flex;justify-content:space-between;align-items:center;text-decoration:none;color:#343a41;font-weight:750;font-size:11px}
+.reference-open:hover{text-decoration:underline}
+.reference-open span{font-size:17px}
+.reference-footnote{font-size:10px;line-height:1.8;color:#a0a7af;margin-top:23px}
+.references-empty{grid-column:1/-1;color:#8b9199;font-size:12px;line-height:1.7;padding:30px;border:1px dashed #d8dde2;border-radius:13px}
+@media(max-width:1220px){.reference-results{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.reference-results{grid-template-columns:1fr 1fr;gap:11px}.references-page{padding:24px 12px}.reference-info{padding:13px}.reference-info h2{font-size:14px}.reference-thumb{aspect-ratio:9/12}}
+@media(max-width:540px){.reference-results{grid-template-columns:1fr}.references-heading{flex-direction:column}.reference-count{margin:0}.reference-thumb{aspect-ratio:9/8}}
