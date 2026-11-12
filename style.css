@@ -346,3 +346,38 @@
 .reference-card:has(.reference-thumb-player) .reference-info{padding:15px 17px}
 .reference-card:has(.reference-thumb-player) .reference-info p{font-size:11px}
 @media(max-width:800px){.reference-thumb-player{aspect-ratio:325 / 578}}
+
+/* TAAMEER Reel Reference Library — four-column grid and color-coded metadata */
+.agents-layout.nonchat-workspace .references-page{max-width:1500px;width:100%}
+.agents-layout.nonchat-workspace .chat-inner:has(.references-page){max-width:1550px;width:100%}
+.reference-results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}
+.reference-card{min-width:0}
+.reference-card:has(.reference-thumb-player){min-width:0}
+.reference-thumb-player{width:100%;max-width:100%}
+.reference-card-compact .reference-info{padding:13px 13px 15px;gap:7px}
+.reference-card-compact .reference-info h2{font-size:14px}
+.reference-card-compact .reference-info p{font-size:10.5px;line-height:1.55}
+.reference-card-compact .reference-card-meta{font-size:9px}
+.reference-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.ref-tag{display:inline-flex;align-items:center;gap:5px;border:1px solid transparent;border-radius:7px;padding:5px 7px;font-size:10px;font-weight:650;line-height:1.25;white-space:nowrap}
+.ref-tag-icon{font-weight:800;display:inline-grid;place-items:center;min-width:12px;font-size:12px}
+.ref-tag.tag-neutral{background:#eff1f3;border-color:#e1e5e9;color:#59626b}
+.ref-tag.tag-blue{background:#eaf2fc;border-color:#d7e6f7;color:#3c6b9f}
+.ref-tag.tag-gold{background:#f7f1df;border-color:#ece1c6;color:#896b28}
+.ref-tag.tag-green{background:#e8f4ec;border-color:#d7eadf;color:#30794a}
+.ref-tag.tag-charcoal{background:#e8e9eb;border-color:#d6d8db;color:#3c4147}
+.ref-tag.tag-violet{background:#efeafa;border-color:#e4dcf5;color:#7653aa}
+.ref-tag.tag-pink{background:#faeaf1;border-color:#f2d9e6;color:#9a4f79}
+.ref-tag.tag-indigo{background:#eceefd;border-color:#dce1fa;color:#545ea0}
+.ref-tag.tag-amber{background:#fcf1dc;border-color:#f5e1b9;color:#93601c}
+.ref-tag.tag-lime{background:#eff6df;border-color:#e0ecc9;color:#677e2b}
+.ref-tag.tag-cyan{background:#e4f5f9;border-color:#cfebf2;color:#2a788b}
+.ref-tag.tag-coral{background:#fff0eb;border-color:#f8ded5;color:#a75b45}
+.ref-tag.tag-teal{background:#e6f3f2;border-color:#d1e7e4;color:#287b78}
+.ref-tag.tag-orange{background:#fff0e2;border-color:#f4dfc7;color:#a9692e}
+.ref-tag.tag-red{background:#fdecec;border-color:#f4d6d6;color:#ac4646}
+.reference-filters .ref-tag{font-size:11px;padding:7px 10px;border-radius:20px;cursor:pointer}
+.reference-filters .ref-tag.active{background:#3b3e40;border-color:#3b3e40;color:white}
+.reference-filters .ref-tag:hover:not(.active){filter:brightness(.97)}
+@media(max-width:1120px){.reference-results{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}}
+@media(max-width:620px){.reference-results{grid-template-columns:1fr;gap:15px}.reference-card-compact .reference-info{padding:16px}.reference-card-compact .reference-info h2{font-size:16px}}
