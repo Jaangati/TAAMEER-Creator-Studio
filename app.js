@@ -199,6 +199,8 @@ function verifiedThumbnail(url){
  try{const u=new URL(url);return u.protocol==='https:'&&['p16-sign.tiktokcdn-us.com','p16-sign-va.tiktokcdn.com','p19-sign.tiktokcdn-us.com','p16-sign-sg.tiktokcdn.com','www.tiktok.com','images.unsplash.com'].includes(u.hostname)?u.href:''}catch{return ''}
 }
 const referenceTagMeta={
+ 'TikTok':{icon:'▶',tone:'charcoal'},
+ 'Reel Inspiration':{icon:'✦',tone:'neutral'},
  'Indoor':{icon:'▣',tone:'neutral'},
  'Outdoor':{icon:'☀',tone:'blue'},
  'Showroom':{icon:'⌂',tone:'gold'},
@@ -227,7 +229,7 @@ function referenceTagHtml(name,isFilter=false){
 }
 function renderReferenceLibrary(){
  const area=$('messages');if(!area)return;
- const tags=['All',...new Set(reelReferences.flatMap(r=>r.tags||[]))];
+ const tags=['All',...new Set(reelReferences.flatMap(r=>r.tags||[]))].sort((a,b)=>a.localeCompare(b));
  area.innerHTML='<section class="references-page"><div class="references-heading"><div><p class="module-kicker">TAAMEER MARKETING CURATION</p><h1>Reel Reference Library</h1><p>Short, practical reels selected by TAAMEER Marketing. Explore the filming setup, content format and creative approach, then make your own version.</p></div><span class="reference-count">'+reelReferences.length+' references</span></div><div class="reference-toolbar"><label class="reference-search">⌕ <input id="reference-search" type="search" aria-label="Search references" placeholder="Search references, tags or formats…" value="'+esc(referenceSearch)+'"></label><div class="reference-filters">'+tags.map(t=>t==='All'?'<button class="reference-filter '+(referenceTag==='All'?'active':'')+'" data-reference-tag="All">All</button>':referenceTagHtml(t,true)).join('')+'</div></div><div class="reference-results" id="reference-results"></div><div class="reference-footnote">Shared by TAAMEER Group Marketing Department. Examples are for creative study; adapt the approach, not another creator\'s exact wording or footage.</div></section>';
  const input=$('reference-search');if(input)input.oninput=ev=>{referenceSearch=ev.target.value;renderReferenceCards()};
  renderReferenceCards();
