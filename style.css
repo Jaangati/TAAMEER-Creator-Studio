@@ -246,3 +246,8 @@
 .choice-number{display:grid;place-items:center;width:24px;height:24px;flex:none;border:1px solid #dce0e5;background:#f2f3f5;border-radius:8px;font-weight:750;color:#4c535b}
 .choice-arrow{margin-left:auto;color:#a2a7ad;font-size:14px}
 @media(max-width:620px){.creative-choices{padding:9px}.choice-button{padding:9px;font-size:11px;gap:9px}}
+
+.selected-followups{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:14px 0 4px;padding:10px 0;border-top:1px solid #eef0f2}
+.selected-followups span{font-size:10px;color:#8c929b;font-weight:700;margin-right:2px}
+.selected-followups button{border:1px solid #e0e4e9;border-radius:20px;padding:7px 11px;background:#f8f9fa;color:#505861;font-size:11px}
+.selected-followups button:hover{border-color:#bcc4ce;background:#eef0f3}
