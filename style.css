@@ -3,7 +3,7 @@
 *{box-sizing:border-box}html,body{margin:0;min-height:100%}button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}a{color:inherit}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #b3bbc6;outline-offset:2px}
 .login-bg{min-height:100vh;display:grid;place-items:center;padding:26px;background:radial-gradient(ellipse at 25% 55%,#e4e7eb 0%,transparent 52%),radial-gradient(ellipse at 80% 10%,#edf0f3 0%,transparent 48%),#f8f9fa}
 .login-card{display:grid;grid-template-columns:1fr 1fr;max-width:1010px;width:100%;min-height:530px;background:#fff;border-radius:23px;overflow:hidden;box-shadow:0 20px 65px #15202b28;border:1px solid #e7e8eb}
-.login-left{background:linear-gradient(140deg,#0d1119,#171b25 58%,#0c1019);padding:41px 40px;display:flex;flex-direction:column;justify-content:space-between;color:white}
+.login-left{background:linear-gradient(140deg,#232527,#3b3e40 58%,#202123);padding:41px 40px;display:flex;flex-direction:column;justify-content:space-between;color:white}
 .login-left img{width:186px;height:87px;object-fit:contain;object-position:left center}
 .login-left h1{font-weight:750;letter-spacing:-.055em;font-size:clamp(34px,4vw,49px);line-height:1.1;margin:0 0 20px}
 .login-left p{font-size:13px;color:#aeb6c1;line-height:1.85;max-width:325px}
@@ -16,13 +16,13 @@
 .login-right .primary{width:100%;margin-top:23px}
 .login-right details{margin-top:24px;padding-top:19px;border-top:1px solid #ebedf0;color:#858b97;font-size:12px}
 .login-right summary{cursor:pointer}.login-right details input{margin:5px 0}
-.primary{border:1px solid #242831;color:#fff;background:#242831;border-radius:11px;padding:14px 18px;font-size:13px;font-weight:700;transition:background .2s}.primary:hover{background:#3b404b}
+.primary{border:1px solid #3b3e40;color:#fff;background:#3b3e40;border-radius:11px;padding:14px 18px;font-size:13px;font-weight:700;transition:background .2s}.primary:hover{background:#3b404b}
 .secondary{border:1px solid #e0e3e7;color:#4b5057;background:white;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;transition:background .2s}.secondary:hover{background:#f5f6f8}
 .notice{background:#f0f1f3;color:#575d65;padding:11px 13px;border-radius:10px;font-size:12px;margin-top:13px}
 .hide{display:none!important}.badge{font-size:10px;color:#616874;background:#f1f2f4;border:1px solid #e3e5e9;border-radius:99px;padding:6px 11px;white-space:nowrap}
 .app{display:flex;height:100dvh;min-height:580px;background:#fff;overflow:hidden}
 .side{width:255px;flex:none;border-right:1px solid #eaeced;background:#fafafa;display:flex;flex-direction:column;padding:22px 13px 18px;gap:19px}
-.side-brand{display:flex;align-items:center;justify-content:center;background:#1c1e21;border-radius:12px;min-height:84px;padding:8px}.side-brand img{width:163px;height:66px;object-fit:contain}
+.side-brand{display:flex;align-items:center;justify-content:center;background:#3b3e40;border-radius:12px;min-height:84px;padding:8px}.side-brand img{width:163px;height:66px;object-fit:contain}
 .side-header{font-size:10px;font-weight:750;color:#9a9da1;letter-spacing:.12em;padding:0 13px;text-transform:uppercase}
 .side-nav{display:grid;gap:4px}
 .nav-button{display:flex;align-items:center;gap:11px;text-align:left;border:1px solid transparent;background:transparent;border-radius:10px;padding:12px;color:#62686e;font-size:13px;font-weight:600}
@@ -41,7 +41,7 @@
 .chat-scroll{flex:1;overflow-y:auto;scroll-behavior:smooth}
 .chat-inner{width:min(850px,100%);margin:auto;padding:34px 30px 25px;min-height:100%;display:flex;flex-direction:column}
 .empty{margin:auto;text-align:center;padding:30px 0 45px;width:100%}
-.empty-mark{width:59px;height:59px;border-radius:17px;background:#1d2024;color:white;display:grid;place-items:center;font-size:30px;margin:0 auto 21px}
+.empty-mark{width:59px;height:59px;border-radius:17px;background:#3b3e40;color:white;display:grid;place-items:center;font-size:30px;margin:0 auto 21px}
 .empty h1{font-size:clamp(27px,3.2vw,41px);letter-spacing:-.065em;line-height:1.18;margin:0 0 13px;color:#202326}
 .empty p{color:#91969c;font-size:13px;line-height:1.8;margin:0 auto;max-width:470px}
 .quick{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:28px auto 0;max-width:760px}
@@ -54,7 +54,7 @@
 .message{max-width:100%;display:flex;gap:14px;margin:23px 0;line-height:1.85;white-space:pre-wrap;font-size:13px;color:#424950}
 .message.me{justify-content:flex-end}
 .bubble{max-width:78%;padding:13px 18px;background:#f2f3f5;border-radius:17px;color:#3d4249}
-.assistant-symbol{flex:none;height:32px;width:32px;border-radius:9px;background:#24282d;color:white;display:grid;place-items:center;font-size:16px}
+.assistant-symbol{flex:none;height:32px;width:32px;border-radius:9px;background:#3b3e40;color:white;display:grid;place-items:center;font-size:16px}
 .answer{min-width:0;flex:1;padding-top:3px}
 .answer h3{margin:0 0 12px;font-size:13px}
 .answer-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
@@ -68,7 +68,7 @@
 .compose textarea{width:100%;border:0;outline:none;font-size:13px;color:#333941;resize:none;min-height:52px;max-height:170px;padding:5px 7px;background:transparent;line-height:1.6}
 .compose-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .compose-tools{display:flex;gap:5px}.compose-tools button{border:0;background:#f4f5f6;border-radius:7px;color:#707780;padding:7px 11px;font-size:11px}
-.send{background:#262a30;color:white;border:0;border-radius:10px;height:36px;width:36px;font-size:22px;line-height:1}
+.send{background:#3b3e40;color:white;border:0;border-radius:10px;height:36px;width:36px;font-size:22px;line-height:1}
 .note{text-align:center;color:#a4a8ae;font-size:10px;margin-top:11px}
 .drawer{position:absolute;inset:0 0 0 auto;z-index:12;width:min(440px,100%);background:#fff;box-shadow:-13px 0 48px #161c262b;border-left:1px solid #edf0f1;display:flex;flex-direction:column}
 .drawer-header{padding:25px;border-bottom:1px solid #eceef0;display:flex;align-items:center;justify-content:space-between}
