@@ -187,7 +187,7 @@ async function loadReelReferences(){
  if(referenceStatus==='loading')return;
  referenceStatus='loading';
  try{
-   const response=await fetch('references/reels.json?v=20261112-classified-v5',{cache:'no-store'});
+   const response=await fetch('references/reels.json?v=20261112-real-covers15',{cache:'no-store'});
    if(!response.ok)throw Error('Reference library unavailable');
    const parsed=await response.json();
    reelReferences=Array.isArray(parsed.references)?parsed.references.filter(x=>x&&/^https:\/\//.test(x.url)&&x.id):[];
