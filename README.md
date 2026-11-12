@@ -1,34 +1,33 @@
-# TAAMEER Creator Studio
+# TAAMEER Agent Studio
 
-Mobile-first internal content production dashboard for TAAMEER Sales, including Creator Brain, hook and script generation, teleprompter, project knowledge, saved content and content planning.
+An internal, browser-based sales content workspace designed by TAAMEER Marketing.
 
-## Deployment
+## Open the application
 
-- Hosted application: https://hylcxekemqttsyfnsiov.supabase.co/functions/v1/creator-studio
-- Supabase project: hylcxekemqttsyfnsiov
-- Frontend source: index.html
-- Production hosting: Supabase Edge Function named creator-studio
-- GitHub Pages: not configured
+https://jaangati.github.io/TAAMEER-Creator-Studio/
 
-## Access model
+## Product experience
 
-Sales team uses one **shared password** entered on the dashboard login screen. The password is validated by the Supabase Edge Function against a salted SHA-256 hash in `sales_access_settings`. The actual password is not stored in this repository.
+The application is intentionally centered on one **Creator Brain** conversation. Idea generation, hooks, scripts, captions, phone filming tips, rule-based script reviews and approved TAAMEER project details are available through chat prompts, shortcut suggestions and optional quick-context chips.
 
-Sales content is shared, not individually attributed. Content is saved to `sales_content` through the server-side endpoint only. Both tables have RLS enabled and no anonymous Data API access. Service-role credentials belong exclusively to the Supabase Edge Function runtime.
+Sales can use the shared team password instead of individual user accounts. Marketing administrator sign-in remains separate. Saved drafts are shared within the Sales team; chat history is local to each browser and can be accessed via Recent Conversations.
 
-Marketing admin sign-in uses Supabase Authentication with a separately provisioned user and `profiles.role = 'admin'`. No Marketing admin account has been created yet.
+The project uses a bright black, white and grey TAAMEER design system. The logo is in `assets/taameer-logo.svg`.
 
-## Known limitations
+## Architecture
 
-- The content engine is deterministic and template-driven; this is not a live LLM.
-- Initial TAAMEER facts require Marketing approval before public use.
-- Arabic-native script production, visual video editing, advanced admin editing and automatic GitHub-to-Supabase deployment are not implemented.
-- Publishing this repository publicly exposes its *source code*, not the protected password or database records.
-- Updating index.html on GitHub does not automatically redeploy the hosted Supabase Edge Function.
-- Shared passwords cannot provide per-agent attribution or revocation. Rotate the password if a team member should lose access.
+- Frontend: `index.html`, `app.js`, `style.css` and `assets/taameer-logo.svg`
+- Hosting: GitHub Pages via `.github/workflows/pages.yml`, which packages all required assets
+- Backend: Supabase project `hylcxekemqttsyfnsiov`, Edge Function `creator-studio`
+- Password verification: salted digest stored in restricted Supabase table; password itself is not committed
+- Sessions: server-signed tokens stored client-side with an 8-hour browser inactivity timeout; server-side maximum token lifetime 7 days. Password rotation invalidates prior tokens.
+- Shared drafts: restricted `sales_content` table accessed through server-side endpoints, not public Supabase Data API access
+- Project facts: read from approved Supabase project records after Sales session verification
 
-## Administration
+## Notes for Marketing
 
-Create the Marketing admin user in Supabase Authentication, then give that user's UUID a row in `profiles` with role `admin`. Do not grant admin privileges in client-editable user metadata. Set Auth signups to invite-only.
+This is a **rules-based content engine, not a full generative AI chatbot**. Responses are constructed using templates, project records and matching rules. Agents must verify all project claims with Marketing.
 
-The web app is hosted publicly at its URL, but dashboard content actions require password verification.
+Individual agent accounts are not required, but a shared password cannot distinguish individual salespeople or selectively revoke one agent. Rotate the password if access changes. Marketing admin authentication needs a separately provisioned administrator.
+
+Source changes to `main` automatically deploy GitHub Pages. The Supabase backend is independently deployed and should not be assumed to redeploy on GitHub updates.
