@@ -1,0 +1,43 @@
+name: Inspect new TikTok reference metadata
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-new-reel-metadata.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Inspect publicly exposed titles and captions without downloading videos
+        run: |
+          python - <<'PY'
+          import urllib.request,urllib.parse,json,html,concurrent.futures
+          from html.parser import HTMLParser
+          links=["https://www.tiktok.com/@ahmed4real88/video/7707231910023679253","https://www.tiktok.com/@hayatsrealestatedubai/video/7673558482649468182","https://www.tiktok.com/@benabdasabrine/video/7681708389457513749","https://www.tiktok.com/@la_ra10.7/video/7707271936367201588","https://www.tiktok.com/@alessiadxb/video/7684238477310872849","https://www.tiktok.com/@b3.realestate/video/7658325270553824519","https://www.tiktok.com/@realtorpranav1/video/7632063973571038484","https://www.tiktok.com/@muskaan.realtor7/video/7677521365825637653","https://www.tiktok.com/@luxury.unfolded/video/7678895835530136862","https://www.tiktok.com/@travelwithmamta/video/7630856815311473942","https://www.tiktok.com/@yunaibra/video/7658273251042348296","https://www.tiktok.com/@surenrealtor/video/7672375979112729874"]
+          class Meta(HTMLParser):
+            def __init__(self): super().__init__();self.data={}
+            def handle_starttag(self,tag,attrs):
+              if tag!='meta':return
+              d=dict(attrs); k=d.get('property') or d.get('name')
+              if k in ['og:title','og:description','twitter:title','twitter:description']:self.data[k]=d.get('content','')
+          def check(item):
+            i,url=item
+            info={'index':i+1,'url':url}
+            heads={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'}
+            try:
+              endpoint='https://www.tiktok.com/oembed?url='+urllib.parse.quote(url,safe='')
+              with urllib.request.urlopen(urllib.request.Request(endpoint,headers=heads),timeout=8) as res: d=json.load(res)
+              info['oembed']={k:d.get(k) for k in ['title','author_name','thumbnail_url'] if d.get(k)}
+            except Exception as e:info['oembed_error']=str(e)[:130]
+            try:
+              with urllib.request.urlopen(urllib.request.Request(url,headers=heads),timeout=8) as res: page=res.read(1100000).decode('utf-8','replace')
+              m=Meta();m.feed(page);info['meta']=m.data
+            except Exception as e:info['page_error']=str(e)[:130]
+            return info
+          with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+            for row in sorted(pool.map(check,enumerate(links)),key=lambda r:r['index']):
+              print('REEL_METADATA:'+json.dumps(row,ensure_ascii=False),flush=True)
+          PY
