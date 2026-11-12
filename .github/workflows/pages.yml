@@ -21,6 +21,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Verify Supabase authentication signer
+        run: |
+          curl --fail --silent --show-error --retry 3 --retry-delay 2 'https://hylcxekemqttsyfnsiov.supabase.co/functions/v1/creator-studio?health=1' | grep -q '"status":"ok"'
       - name: Stage static site
         run: |
           mkdir -p dist
