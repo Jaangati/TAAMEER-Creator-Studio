@@ -5,6 +5,7 @@ const root=document.getElementById('app');
 const logo='assets/taameer-logo.svg';
 const mark='assets/taameer-mark.svg';
 let activeModule='brain',chatPanelOpen=true;
+let reelReferences=[],referenceStatus='idle',referenceSearch='',referenceTag='All';
 const maxIdle=8*60*60*1000;
 const initialProjects=[
 {slug:'general',name:'Qatar Real Estate',location:'Qatar',facts:['Educational real estate content. Verify all financial claims.']},
@@ -164,9 +165,9 @@ function shell(){
  '<div class="thread-row '+(state.threadId===t.id?'selected':'')+'"><button class="thread-select" data-thread="'+esc(t.id)+'" title="'+esc(t.title)+'">'+esc(t.title)+'</button><button class="thread-more" data-thread-menu="'+esc(t.id)+'" aria-label="Chat options">···</button></div>'
  ).join('');
  const item=(name,label,iconName)=>'<button class="module-link '+(activeModule===name?'active':'')+'" data-module="'+name+'">'+icon(iconName)+'<span>'+label+'</span></button>';
- const left='<aside class="global-side"><div class="global-header"><div class="global-logo"><img src="'+logo+'" alt="TAAMEER"></div><div class="global-subtitle">AGENTS STUDIO</div></div><div class="module-title">WORKSPACE</div><nav class="module-nav">'+item('brain','Creator Brain','chat')+item('toolkit','Content Tools','plus')+item('projects','Project Library','save')+'</nav><div class="module-spacer"></div><div class="global-bottom"><div class="global-caption">Designed for TAAMEER sales professionals.</div><div class="global-copyright">© 2026 TAAMEER Group Marketing Department.<br>All rights reserved.</div></div></aside>';
+ const left='<aside class="global-side"><div class="global-header"><div class="global-logo"><img src="'+logo+'" alt="TAAMEER"></div><div class="global-subtitle">AGENTS STUDIO</div></div><div class="module-title">WORKSPACE</div><nav class="module-nav">'+item('brain','Creator Brain','chat')+item('toolkit','Reel References','plus')+item('projects','Project Library','save')+'</nav><div class="module-spacer"></div><div class="global-bottom"><div class="global-caption">Designed for TAAMEER sales professionals.</div><div class="global-copyright">© 2026 TAAMEER Group Marketing Department.<br>All rights reserved.</div></div></aside>';
  const right='<aside class="chat-side" id="chat-side"><div class="chat-side-head"><div><div class="module-title" style="margin:0">CREATOR BRAIN</div><strong>Your conversations</strong></div><button class="icon-btn" data-action="toggle-right" aria-label="Close conversations">×</button></div><div class="chat-side-actions"><button class="new-chat" data-action="new">'+icon('plus')+' New chat</button></div><div class="chat-side-heading">RECENT CHATS <span>On this browser</span></div><div class="chat-side-list">'+(recent||'<p class="no-chats">Your chats will appear here after your first message.</p>')+'</div><div class="chat-side-bottom"><button class="side-action" data-action="saved">'+icon('save')+' Saved drafts</button><div class="right-caption">Private to this browser · Saved locally</div></div></aside>';
- root.innerHTML='<div class="app agents-layout '+(window.innerWidth<850?'right-closed':'')+' '+(chatPanelOpen?'':'right-closed')+'">'+left+'<section class="stage"><header class="topbar"><div class="topbrand"><img class="header-icon" src="'+mark+'" alt=""><span>'+({brain:'Creator Brain',toolkit:'Content Tools',projects:'Project Library'}[activeModule]||'Creator Brain')+'</span><span class="quiet-label">by TAAMEER</span></div><div class="topright"><button class="secondary right-toggle" data-action="toggle-right">'+icon('history')+' <span>Chats</span></button><button class="secondary" data-action="logout">Sign out</button></div></header><div class="chat-scroll" id="scroll"><div class="chat-inner" id="messages"></div></div><div class="composer-area" id="composer-area"><div class="tagstrip" id="tags"></div><div class="compose"><textarea id="message-input" rows="2" placeholder="Ask anything about your next reel..."></textarea><div class="compose-row"><span class="compose-hint">Enter to send · Shift+Enter for a new line</span><button class="send" data-action="send" aria-label="Send">'+icon('arrow')+'</button></div></div><div class="note">Verify project claims with TAAMEER Marketing before publication.</div></div><div id="drawer-root"></div></section>'+right+'</div>';
+ root.innerHTML='<div class="app agents-layout '+(window.innerWidth<850?'right-closed':'')+' '+(chatPanelOpen?'':'right-closed')+'">'+left+'<section class="stage"><header class="topbar"><div class="topbrand"><img class="header-icon" src="'+mark+'" alt=""><span>'+({brain:'Creator Brain',toolkit:'Reel Reference Library',projects:'Project Library'}[activeModule]||'Creator Brain')+'</span><span class="quiet-label">by TAAMEER</span></div><div class="topright"><button class="secondary right-toggle" data-action="toggle-right">'+icon('history')+' <span>Chats</span></button><button class="secondary" data-action="logout">Sign out</button></div></header><div class="chat-scroll" id="scroll"><div class="chat-inner" id="messages"></div></div><div class="composer-area" id="composer-area"><div class="tagstrip" id="tags"></div><div class="compose"><textarea id="message-input" rows="2" placeholder="Ask anything about your next reel..."></textarea><div class="compose-row"><span class="compose-hint">Enter to send · Shift+Enter for a new line</span><button class="send" data-action="send" aria-label="Send">'+icon('arrow')+'</button></div></div><div class="note">Verify project claims with TAAMEER Marketing before publication.</div></div><div id="drawer-root"></div></section>'+right+'</div>';
  renderWorkspace();renderDrawer();root.onclick=clickHandler;
  const field=$('message-input');if(field)field.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}};
 }
@@ -175,10 +176,46 @@ function renderWorkspace(){
  const area=$('messages'),composer=$('composer-area');if(composer)composer.classList.add('hide');
  if(!area)return;
  if(activeModule==='toolkit'){
-   area.innerHTML='<section class="module-page"><p class="module-kicker">CONTENT PRODUCTION</p><h1>Your content toolkit</h1><p class="muted">Pick a task and Creator Brain will help you get started. Everything stays in your chat.</p><div class="module-cards">'+[['Write a reel','Write a 30-second property reel script'],['Find content ideas','Give me five reel ideas I can shoot with my phone'],['Review a draft','Help me review my existing reel script'],['Plan a shoot','Give me a filming plan for a simple Instagram reel']].map(([title,prompt])=>'<button class="module-card" data-prompt="'+esc(prompt)+'"><strong>'+esc(title)+'</strong><span>Start with Creator Brain →</span></button>').join('')+'</div></section>';
+  renderReferenceLibrary();
+  if(referenceStatus==='idle')loadReelReferences();
  }else{
    area.innerHTML='<section class="module-page"><p class="module-kicker">TAAMEER REFERENCE</p><h1>Project Library</h1><p class="muted">Quick reference information for your next reel. Use only Marketing-approved facts.</p><div class="module-cards">'+state.projects.filter(p=>p.slug!=='general').map(p=>'<article class="module-card"><strong>'+esc(p.name)+'</strong><p>'+esc(p.location||'Qatar')+'</p><button class="module-mini" data-ask-project="'+esc(p.slug)+'">Ask Creator Brain →</button></article>').join('')+'</div></section>';
  }
+}
+async function loadReelReferences(){
+ if(referenceStatus==='loading')return;
+ referenceStatus='loading';
+ try{
+   const response=await fetch('references/reels.json',{cache:'no-store'});
+   if(!response.ok)throw Error('Reference library unavailable');
+   const parsed=await response.json();
+   reelReferences=Array.isArray(parsed.references)?parsed.references.filter(x=>x&&/^https:\/\//.test(x.url)&&x.id):[];
+   referenceStatus='ready';
+ }catch(error){referenceStatus='error'}
+ if(activeModule==='toolkit')renderReferenceLibrary();
+}
+function verifiedThumbnail(url){
+ if(!url)return '';
+ try{const u=new URL(url);return u.protocol==='https:'&&['p16-sign.tiktokcdn-us.com','p16-sign-va.tiktokcdn.com','p19-sign.tiktokcdn-us.com','p16-sign-sg.tiktokcdn.com','www.tiktok.com','images.unsplash.com'].includes(u.hostname)?u.href:''}catch{return ''}
+}
+function renderReferenceLibrary(){
+ const area=$('messages');if(!area)return;
+ const tags=['All',...new Set(reelReferences.flatMap(r=>r.tags||[]))];
+ area.innerHTML='<section class="references-page"><div class="references-heading"><div><p class="module-kicker">TAAMEER MARKETING CURATION</p><h1>Reel Reference Library</h1><p>Real-world creative inspiration for videos agents can adapt and film with their phones. Open the original post, understand its approach, then make it your own.</p></div><span class="reference-count">'+reelReferences.length+' references</span></div><div class="reference-toolbar"><label class="reference-search">⌕ <input id="reference-search" type="search" aria-label="Search references" placeholder="Search references, tags or formats…" value="'+esc(referenceSearch)+'"></label><div class="reference-filters">'+tags.map(t=>'<button class="reference-filter '+(referenceTag===t?'active':'')+'" data-reference-tag="'+esc(t)+'">'+esc(t)+'</button>').join('')+'</div></div><div class="reference-results" id="reference-results"></div><div class="reference-footnote">Shared by TAAMEER Group Marketing Department. Examples are for creative study; adapt the approach, not another creator\'s exact wording or footage.</div></section>';
+ const input=$('reference-search');if(input)input.oninput=ev=>{referenceSearch=ev.target.value;renderReferenceCards()};
+ renderReferenceCards();
+}
+function renderReferenceCards(){
+ const target=$('reference-results');if(!target)return;
+ if(referenceStatus==='loading'){target.innerHTML='<p class="references-empty">Loading references…</p>';return}
+ if(referenceStatus==='error'){target.innerHTML='<p class="references-empty">The reference library could not load. Please refresh and try again.</p>';return}
+ const q=referenceSearch.trim().toLowerCase();
+ const visible=reelReferences.filter(r=>(referenceTag==='All'||(r.tags||[]).includes(referenceTag))&&(!q||[r.title,r.description,r.platform,r.format,r.difficulty,...(r.tags||[])].join(' ').toLowerCase().includes(q)));
+ target.innerHTML=visible.length?visible.map((r,i)=>{
+ const thumb=verifiedThumbnail(r.thumbnail_url),pending=r.review_status!=='reviewed';
+ const picture=thumb?'<img loading="lazy" alt="Video thumbnail" src="'+esc(thumb)+'">':'<div class="reference-placeholder"><div class="reference-placeholder-mark">▶</div><span>VIDEO PREVIEW</span><small>Thumbnail awaiting review</small></div>';
+ return'<article class="reference-card"><div class="reference-thumb">'+picture+'<span class="reference-platform">'+esc(r.platform||'Reel')+'</span></div><div class="reference-info"><div class="reference-card-meta">'+(pending?'Awaiting content review':'Marketing reviewed')+' · '+esc(r.difficulty||'Difficulty not assessed')+'</div><h2>'+esc(r.title)+'</h2><p>'+esc(r.description||'')+'</p><div class="reference-tags">'+(r.tags||[]).map(t=>'<span>'+esc(t)+'</span>').join('')+'</div><div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch original <span>↗</span></a></div></div></article>';
+ }).join(''):'<p class="references-empty">No references match your search or selected tag.</p>';
 }
 function safeSource(url){try{const u=new URL(url);return u.protocol==="https:"&&/^(?:[\w-]+\.)*(?:gov\.qa|lusail\.com|qetaifanprojects\.com|udcqatar\.com|thepeninsulaqatar\.com)$/.test(u.hostname)?u.href:""}catch{return ""}}
 function fmt(s){return esc(s).replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>')}
@@ -199,7 +236,7 @@ function extractCreativeOptions(body){
 function renderMessages(){
  const target=$('messages');if(!target)return;
  if(!state.messages.length){
- target.innerHTML='<div class="empty"><div class="empty-mark"><img src="'+mark+'" alt="TAAMEER"></div><h1>What shall we film today?</h1><p>Pick a video idea. I can write the exact script you can say on camera, then help you make it sound like you.</p><div class="suggestions">'+[
+ target.innerHTML='<div class="empty"><div class="empty-mark"><img src="'+mark+'" alt="TAAMEER"></div><h1>Let me help you make your next reel.</h1><p>Explore thousands of creative directions, discover new content ideas, and get a natural script written for you to say on camera. No professional setup needed.</p><div class="suggestions">'+[
  ['Give me reel ideas','Suggest four informative real estate reel ideas for a sales agent'],
  ['Write me a script','Write me a natural spoken 30-second reel script for a Qatar real estate agent'],
  ['I am at the showroom','Suggest four reel ideas I can film in the showroom today']
@@ -226,6 +263,7 @@ function findSaved(id){return [...state.saved,...state.plans].find(x=>x.id===id)
 async function clickHandler(e){const t=e.target.closest('button');if(!t)return;const a=t.dataset.action;if(a==='new'){newThread();return}
  if(a==='toggle-right'){const app=root.querySelector('.app');app?.classList.toggle('right-closed');chatPanelOpen=!app?.classList.contains('right-closed');return}
  if(t.dataset.module){activeModule=t.dataset.module;render();return}
+ if(t.dataset.referenceTag){referenceTag=t.dataset.referenceTag;renderReferenceLibrary();return}
  if(t.dataset.askProject){state.project=t.dataset.askProject;activeModule='brain';render();send('Tell me about '+currentProject().name+' and suggest a useful reel idea');return}
  if(a==='projects'){$('project-chips')?.classList.toggle('hide');return}
  if(t.dataset.threadMenu){
