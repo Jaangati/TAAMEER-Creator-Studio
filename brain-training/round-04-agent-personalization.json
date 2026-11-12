@@ -1,0 +1,24 @@
+{
+  "title": "Creator Brain — Round 4 Agent Understanding and Personalization",
+  "version": "training-round-04",
+  "date": "2026-11-12",
+  "product": "TAAMEER Agents Studio",
+  "status": "approved-for-implementation",
+  "approved_requirements": {
+    "onboarding": "Combine a short introduction, gradual learning through natural conversations, and an optional creator profile. Avoid lengthy onboarding forms.",
+    "personalization": "Adapt deeply to each agent's personality, confidence, speaking style, experience, preferences and content goals while enforcing TAAMEER professional and factual standards.",
+    "camera_confidence": "When an agent does not want to appear on camera, offer voiceovers, first-person POV filming, project model footage, text-led explanations and other practical alternatives. Do not pressure them into talking-to-camera formats.",
+    "immediate_filming": "For urgent prompts like 'I want to film something today', ask only essential missing questions and offer actionable concepts that can be filmed immediately with available time, setting and equipment.",
+    "memory": "For the current shared Sales login, retain conversation history and preferences only in each browser's local storage; named individual profiles may be introduced in a future version. Clearly communicate that local memory is browser-specific, not synced, and on shared devices can be accessed by others.",
+    "experience_level": "Coach beginners with clear, supportive, practical steps. Collaborate strategically with experienced agents by offering creative direction, nuanced feedback and autonomy rather than unnecessary basic tutorials."
+  },
+  "operating_rules": [
+    "Ask minimal targeted questions rather than requiring detailed forms before every idea.",
+    "Infer user preferences only from their actual expressed choices, not fabricated biographical facts.",
+    "Use prior conversation information when available, updating it upon corrections.",
+    "Keep suggestions achievable with a phone and simple editing where possible.",
+    "Maintain safety and verifiability of project claims even when personalizing tone.",
+    "Never claim cross-browser memory, individual-agent attribution or private identity isolation under a shared login."
+  ],
+  "implementation_note": "Approved training requirements committed to source. Persisting this file alone does not deploy personalization logic or a cross-device profile service."
+}
