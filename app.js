@@ -242,52 +242,38 @@ function clearReferenceObserver(){
  if(referenceObserver){referenceObserver.disconnect();referenceObserver=null}
  referenceQueue=[];referenceQueueActive=false;referenceRenderVersion++;
 }
+// TikTok embeds are requested only after an explicit Play click, never on render or scroll.
+// Keep at most one active iframe; multiple TikTok frames often produce access-denied responses.
 function mountTikTokPlayer(host){
- if(!host?.isConnected||host.dataset.loaded==='true'||activeModule!=='toolkit')return;
+ if(!host?.isConnected||activeModule!=='toolkit')return;
  const videoId=host.dataset.videoId||'';
  if(!/^[0-9]{15,21}$/.test(videoId))return;
+ document.querySelectorAll('.reference-thumb-player iframe').forEach(other=>{
+  const container=other.closest('.reference-thumb-player');
+  if(container!==host)resetTikTokPlayer(container);
+ });
  const iframe=document.createElement('iframe');
- iframe.width='325';iframe.height='578';iframe.loading='lazy';
+ iframe.width='325';iframe.height='578';iframe.loading='eager';
  iframe.title=host.dataset.title||'TikTok reel reference';
  iframe.setAttribute('frameborder','0');
  iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share');
  iframe.setAttribute('allowfullscreen','');
  iframe.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
- // Don't autoplay fifteen third-party players: this reduces simultaneous requests, CPU and rate-limit failures.
- iframe.src='https://www.tiktok.com/player/v1/'+videoId+'?music_info=1&description=1&autoplay=0&muted=1&embed_from=embed_page';
- host.dataset.loaded='true';host.replaceChildren(iframe);
+ iframe.src='https://www.tiktok.com/player/v1/'+videoId+'?music_info=1&description=1&autoplay=1&muted=1&embed_from=embed_page';
+ host.dataset.loaded='true';
+ host.classList.add('is-playing');
+ host.replaceChildren(iframe);
 }
-function scheduleTikTokPlayer(host){
- if(!host||host.dataset.loaded==='true'||host.dataset.queued==='true')return;
- host.dataset.queued='true';
- referenceQueue.push(host);
- if(!referenceQueueActive)nextReferencePlayer();
-}
-function nextReferencePlayer(){
- if(referenceQueueActive||!referenceQueue.length)return;
- referenceQueueActive=true;
- const version=referenceRenderVersion;
- const step=()=>{
-  if(version!==referenceRenderVersion){referenceQueueActive=false;return}
-  const host=referenceQueue.shift();
-  if(host?.isConnected){host.dataset.queued='false';mountTikTokPlayer(host)}
-  if(referenceQueue.length){setTimeout(step,2100)}
-  else referenceQueueActive=false;
- };
- step();
+function resetTikTokPlayer(host){
+ if(!host)return;
+ const videoId=host.dataset.videoId||'';
+ const link=reelReferences.find(x=>x.tiktok_video_id===videoId)?.url||'https://www.tiktok.com/';
+ host.dataset.loaded='false';
+ host.classList.remove('is-playing');
+ host.innerHTML='<div class="reference-loading-poster"><span class="reference-loading-play">▶</span><strong>Play reel</strong><small>Loads only when you choose to watch</small><a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">Open on TikTok ↗</a></div>';
 }
 function setupProgressiveReelPlayers(){
- if(referenceObserver)referenceObserver.disconnect();
- const hosts=[...document.querySelectorAll('.reference-thumb-player[data-video-id]')];
- if(!hosts.length)return;
- // Only load video players near the visible library viewport, with staggered requests.
- if(typeof IntersectionObserver==='undefined'){hosts.slice(0,2).forEach(scheduleTikTokPlayer);return}
- referenceObserver=new IntersectionObserver(entries=>{
-  for(const entry of entries){
-   if(entry.isIntersecting){referenceObserver.unobserve(entry.target);scheduleTikTokPlayer(entry.target)}
-  }
- },{root:$('scroll')||null,rootMargin:'100px 0px 160px 0px',threshold:0.01});
- hosts.forEach(el=>referenceObserver.observe(el));
+ // No autoplay, no scroll-triggered iframes, no observer — explicit user action only.
 }
 function renderReferenceCards(){
  const target=$('reference-results');if(!target)return;
@@ -301,9 +287,9 @@ function renderReferenceCards(){
   const videoId=String(r.tiktok_video_id||'');
   const validTikTokId=/^[0-9]{15,21}$/.test(videoId)&&r.platform==='TikTok';
   const image=thumb?'<img loading="lazy" alt="Original reel cover image" src="'+esc(thumb)+'">':'<span class="reference-graphic"><span class="reference-graphic-icon">▶</span><small>Preview loads when visible</small></span>';
-  const media=validTikTokId?'<div class="reference-thumb reference-thumb-player reference-player-waiting" data-video-id="'+esc(videoId)+'" data-title="'+esc(r.title)+'"><div class="reference-loading-poster"><span class="reference-loading-play">▶</span><small>Loading TikTok preview…</small><a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Open original ↗</a></div></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
+  const media=validTikTokId?'<div class="reference-thumb reference-thumb-player reference-player-waiting" data-video-id="'+esc(videoId)+'" data-title="'+esc(r.title)+'"><div class="reference-loading-poster"><button class="reference-play-btn" data-play-video="'+videoId+'" aria-label="Play '+esc(r.title)+'"><span class="reference-loading-play">▶</span><strong>Play reel</strong><small>Tap to load TikTok video</small></button><a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Open on TikTok ↗</a></div></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
   const detail=r.description&& !/original tiktok video reference shared by/i.test(r.description)?r.description:'A TAAMEER Marketing reference. Open the original reel to explore its format and filming style.';
-  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.filter(t=>t!=='TikTok'&&t!=='Reel Inspiration').map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a>'+(validTikTokId?'<button class="reference-retry" data-reload-video="'+videoId+'" title="Reload the TikTok embed if it fails">↻ Reload video</button>':'')+'</div></div></article>';
+  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.filter(t=>t!=='TikTok'&&t!=='Reel Inspiration').map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a>'+(validTikTokId?'<button class="reference-retry" data-reload-video="'+videoId+'" title="Reload the TikTok embed if it fails">↻ Retry player</button>':'')+'</div></div></article>';
  }).join(''):'<p class="references-empty">No references match your search or selected tag.</p>';
  setupProgressiveReelPlayers();
 }
@@ -352,9 +338,14 @@ function renderDrawer(){const target=$('drawer-root');if(!target)return;if(!stat
 function findSaved(id){return [...state.saved,...state.plans].find(x=>x.id===id)}
 async function clickHandler(e){const t=e.target.closest('button');if(!t)return;const a=t.dataset.action;if(a==='new'){newThread();return}
  if(a==='toggle-right'){const app=root.querySelector('.app');app?.classList.toggle('right-closed');chatPanelOpen=!app?.classList.contains('right-closed');return}
+ if(t.dataset.playVideo){
+  const target=document.querySelector('.reference-thumb-player[data-video-id="'+t.dataset.playVideo+'"]');
+  if(target)mountTikTokPlayer(target);
+  return
+ }
  if(t.dataset.reloadVideo){
   const target=document.querySelector('.reference-thumb-player[data-video-id="'+t.dataset.reloadVideo+'"]');
-  if(target){target.dataset.loaded='false';target.dataset.queued='false';target.replaceChildren();scheduleTikTokPlayer(target);}
+  if(target){resetTikTokPlayer(target);mountTikTokPlayer(target)}
   return
  }
  if(t.dataset.module){activeModule=t.dataset.module;render();return}
