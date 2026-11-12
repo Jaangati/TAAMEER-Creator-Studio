@@ -44,3 +44,17 @@ The Reel Reference Library contains **Marketing-selected inspiration videos**, n
 If footage cannot be inspected, leave `analysis_status="not_yet_analyzed"`, set unverified filming classification fields to null and keep `tags=[]`. This status is **internal analysis metadata**, not a user-facing approval requirement. The website should never show “Awaiting approval,” “Pending review,” or similar labels.
 
 Do not copy another creator's footage or script. Link the original and encourage agents to adapt the concept and filming technique in their own words.
+
+## Standard TikTok playback
+
+Every published TikTok reference with a verified numeric `tiktok_video_id` must use the **official TikTok iframe** directly on its library card. Preserve the exact source parameters and permissions:
+
+```html
+<iframe height="578" width="325"
+  src="https://www.tiktok.com/player/v1/VIDEO_ID?music_info=1&description=1&autoplay=1&muted=1&embed_from=embed_page"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
+  title="Descriptive reel title" allowfullscreen loading="lazy"></iframe>
+```
+
+Replace only `VIDEO_ID` and the accessible `title` for each entry. Render responsively at aspect ratio 325:578 and keep a direct "Watch on TikTok" link below it in case the player is blocked by TikTok, the browser, or the network. A short-link without a verified video ID must remain an external link until the canonical ID is confirmed. For new links, **present analysis and proposed tags to Marketing here in chat and wait for confirmation before publishing**.
