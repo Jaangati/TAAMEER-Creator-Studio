@@ -42,8 +42,8 @@ const $=id=>document.getElementById(id);
 const toText=x=>String(x||'').trim();
 const now=()=>Date.now();
 function storage(){try{return JSON.parse(localStorage.getItem('taameer-studio-v3')||'{}')}catch{return {}}}
-function saveState(){try{localStorage.setItem('taameer-studio-v3',JSON.stringify({token:state.token,last:state.last,project:state.project,threads:state.threads.slice(0,12),threadId:state.threadId,modeTag:state.modeTag}))}catch{}}
-function logout(){state.token=null;state.admin=null;state.mode=null;state.messages=[];state.threads=[];state.threadId=null;state.drawer=null;localStorage.removeItem('taameer-studio-v3');sb.auth.signOut().catch(()=>{});render()}
+function saveState(){try{localStorage.setItem('taameer-studio-v3',JSON.stringify({token:state.token,last:state.last,project:state.project,threads:state.threads.slice(0,40),threadId:state.threadId,modeTag:state.modeTag}))}catch{}}
+function logout(){state.token=null;state.admin=null;state.mode=null;state.messages=[];state.threadId=null;state.drawer=null;saveState();sb.auth.signOut().catch(()=>{});render()}
 function touch(){if(!state.mode)return;if(now()-state.last>maxIdle){logout();return}if(now()-state.last>30000){state.last=now();saveState()}}
 function timedOut(){return !state.last||now()-state.last>maxIdle}
 setInterval(()=>{if(state.mode&&timedOut())logout()},60000);
@@ -73,11 +73,38 @@ else{type='ideas';body='I can help you with real estate hooks, reel ideas, pract
 return {type,body,title,project:p.name,created:now()}}
 function isLogged(){return state.mode==='sales'||state.mode==='admin'}
 function entryView(){root.innerHTML='<main class="login-bg"><div class="login-card"><section class="login-left"><img src="'+logo+'" alt="TAAMEER"><div class="pitch"><h1>Building<br>Success,<br>Together.</h1><p>The people behind TAAMEER’s growth — creating stories worth sharing.</p></div><footer>© 2026 TAAMEER GROUP · MARKETING DEPARTMENT</footer></section><section class="login-right"><h2>Welcome back</h2><div class="sub">Sign in to your TAAMEER Agent Studio.</div><label for="salespass">Team access password</label><input id="salespass" type="password" placeholder="Enter your team password" autocomplete="off"><button class="primary" id="sales-login">Sign in</button><div id="login-error" class="notice hide"></div><details><summary>Marketing administration access</summary><label for="admin-user">Marketing account</label><input id="admin-user" type="text" autocomplete="username" placeholder="Account identifier"><label for="admin-pass">Password</label><input id="admin-pass" type="password" autocomplete="current-password"><button class="secondary" id="admin-login" style="width:100%;margin-top:14px">Access administration</button></details><p style="font-size:11px;color:#a4a9b0;margin-top:27px;line-height:1.7">Need access? Contact the TAAMEER Marketing Department.</p></section></div></main>'; $('sales-login').onclick=loginSales;$('salespass').onkeydown=e=>{if(e.key==='Enter')loginSales()};$('admin-login').onclick=loginAdmin;}
-async function loginSales(){const b=$('sales-login');const pass=$('salespass').value;b.disabled=true;try{const res=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'login',password:pass})});const d=await res.json();if(!res.ok)throw Error(d.error||'Invalid password');state.token=d.token;state.mode='sales';state.last=now();state.project='general';state.messages=[];state.threads=[];newThread(false);saveState();await loadData();render()}catch(e){$('login-error').textContent='Could not sign in. Check the password and try again.';$('login-error').classList.remove('hide');b.disabled=false}}
+async function loginSales(){const b=$('sales-login');const pass=$('salespass').value;b.disabled=true;try{const res=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'login',password:pass})});const d=await res.json();if(!res.ok)throw Error(d.error||'Invalid password');state.token=d.token;state.mode='sales';state.last=now();state.project='general';state.messages=[];state.threads=storage().threads||[];newThread(false);saveState();await loadData();render()}catch(e){$('login-error').textContent='Could not sign in. Check the password and try again.';$('login-error').classList.remove('hide');b.disabled=false}}
 async function loginAdmin(){const b=$('admin-login');b.disabled=true;const u=$('admin-user').value,p=$('admin-pass').value;try{const r=await sb.auth.signInWithPassword({email:u,password:p});if(r.error)throw Error('Not allowed');const role=await sb.from('profiles').select('role').eq('id',r.data.user.id).maybeSingle();if(role.data?.role!=='admin')throw Error('Not allowed');state.mode='admin';state.admin=r.data.user.id;state.last=now();state.threads=[];newThread(false);saveState();await loadData();render()}catch(e){$('login-error').textContent='Marketing sign-in failed. Contact your administrator.';$('login-error').classList.remove('hide');b.disabled=false}}
-function newThread(draw=true){state.threadId=crypto.randomUUID();state.messages=[];state.project='general';state.modeTag='Ideas';state.threads.unshift({id:state.threadId,title:'New conversation',messages:[],project:'general'});if(draw){saveState();render()}}
-function persistThread(){const t=state.threads.find(x=>x.id===state.threadId);if(t){t.messages=state.messages.slice(-35);t.project=state.project;t.title=state.messages.find(x=>x.me)?.body?.slice(0,55)||'New conversation'}saveState()}
-function selectThread(id){const t=state.threads.find(x=>x.id===id);if(!t)return;state.threadId=id;state.messages=t.messages||[];state.project=t.project||'general';state.drawer=null;saveState();render()}
+function newThread(draw=true){
+  if(state.messages.length)persistThread();
+  state.threadId=crypto.randomUUID();state.messages=[];state.project='general';
+  state.threads.unshift({id:state.threadId,title:'New chat',customTitle:false,messages:[],project:'general',updatedAt:now()});
+  state.threads=state.threads.slice(0,40);saveState();if(draw)render()
+}
+function persistThread(){
+  const t=state.threads.find(x=>x.id===state.threadId);
+  if(t){t.messages=state.messages.slice(-75);t.project=state.project;t.updatedAt=now();
+    if(!t.customTitle)t.title=(state.messages.find(x=>x.me)?.body||'New chat').replace(/\s+/g,' ').slice(0,48);
+  }
+  state.threads.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));state.threads=state.threads.slice(0,40);saveState()
+}
+function selectThread(id){
+  const t=state.threads.find(x=>x.id===id);if(!t)return;
+  state.threadId=id;state.messages=Array.isArray(t.messages)?t.messages:[];state.project=t.project||'general';state.drawer=null;
+  saveState();render()
+}
+function renameThread(id){
+  const t=state.threads.find(x=>x.id===id);if(!t)return;
+  const next=window.prompt('Rename conversation',t.title);
+  if(next===null)return;const name=next.trim().slice(0,70);if(!name)return;
+  t.title=name;t.customTitle=true;saveState();render()
+}
+function deleteThread(id){
+  const t=state.threads.find(x=>x.id===id);if(!t||!window.confirm('Delete this conversation from this browser?'))return;
+  state.threads=state.threads.filter(x=>x.id!==id);
+  if(state.threadId===id){const next=state.threads[0];if(next){state.threadId=next.id;state.messages=next.messages||[];state.project=next.project||'general'}else newThread(false)}
+  saveState();render()
+}
 async function loadData(){if(state.mode==='sales'){const d=await Promise.all([request('list'),request('projects')]);state.saved=d[0].ideas||[];state.plans=d[0].plans||[];if(d[1].projects?.length)state.projects=d[1].projects}else if(state.mode==='admin'){const r=await sb.from('projects').select('slug,name,location,facts,approved').eq('approved',true);if(r.data?.length)state.projects=r.data}}
 function icon(name){const icons={chat:'<path d="M4 5h16v12H8l-4 3z"/>',plus:'<path d="M12 5v14M5 12h14"/>',save:'<path d="M5 3h14l2 2v16H3V3z"/><path d="M7 3v7h10V3M7 21v-8h10v8"/>',logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',arrow:'<path d="M12 19V5m-7 7 7-7 7 7"/>',history:'<path d="M3 12a9 9 0 1 0 3-7M3 3v6h6M12 7v5l4 3"/>',close:'<path d="M18 6 6 18M6 6l12 12"/>'};return'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[name]||icons.chat)+'</svg>'}
 function shell(){const side='<aside class="side"><div class="side-brand"><img src="'+logo+'" alt="TAAMEER"></div><div class="side-header">STUDIO</div><nav class="side-nav"><button class="nav-button active" data-action="new">'+icon('chat')+'<span>Creator Brain</span></button><button class="nav-button" data-action="new">'+icon('plus')+'<span>New conversation</span></button><button class="nav-button" data-action="saved">'+icon('save')+'<span>Saved drafts</span></button></nav><div class="side-header">RECENT CONVERSATIONS</div><div class="side-recent">'+state.threads.slice(0,12).filter(x=>x.messages?.length).map(t=>'<button data-thread="'+esc(t.id)+'">'+esc(t.title)+'</button>').join('')+'</div><div class="side-foot">TAAMEER MARKETING DEPARTMENT<br>YOUR CONTENT. OUR IDENTITY.</div></aside>';root.innerHTML='<div class="app">'+side+'<section class="stage"><div class="topbar"><div class="topbrand"><span class="dot"></span> CREATOR BRAIN <span class="badge">Knowledge-based</span></div><div class="topright"><span class="badge">TAAMEER Agent Studio</span><button class="secondary" data-action="logout">Sign out</button></div></div><div class="chat-scroll" id="scroll"><div class="chat-inner" id="messages"></div></div><div class="composer-area"><div class="tagstrip" id="tags"></div><div class="compose"><textarea id="message-input" rows="2" placeholder="Ask for an idea, a script, filming help, a caption, or a review..."></textarea><div class="compose-row"><div class="compose-tools"><button data-action="review">Review script</button><button data-action="filming">Filming guide</button></div><button class="send" data-action="send" aria-label="Send">'+icon('arrow')+'</button></div></div><div class="note">Creator Brain uses TAAMEER project facts and predefined creative rules. Verify claims before publishing.</div></div><div id="drawer-root"></div></section></div>';renderMessages();renderTags();renderDrawer();root.onclick=clickHandler;$('message-input').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}}
