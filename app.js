@@ -180,17 +180,24 @@ function renderWorkspace(){
    area.innerHTML='<section class="module-page"><p class="module-kicker">TAAMEER REFERENCE</p><h1>Project Library</h1><p class="muted">Quick reference information for your next reel. Use only Marketing-approved facts.</p><div class="module-cards">'+state.projects.filter(p=>p.slug!=='general').map(p=>'<article class="module-card"><strong>'+esc(p.name)+'</strong><p>'+esc(p.location||'Qatar')+'</p><button class="module-mini" data-ask-project="'+esc(p.slug)+'">Ask Creator Brain →</button></article>').join('')+'</div></section>';
  }
 }
+function safeSource(url){try{const u=new URL(url);return u.protocol==="https:"&&/^(?:[\w-]+\.)*(?:gov\.qa|lusail\.com|qetaifanprojects\.com|udcqatar\.com|thepeninsulaqatar\.com)$/.test(u.hostname)?u.href:""}catch{return ""}}
+function fmt(s){return esc(s).replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>')}
 function renderMessages(){
  const target=$('messages');if(!target)return;
  if(!state.messages.length){
- target.innerHTML='<div class="empty"><div class="empty-mark"><img src="'+mark+'" alt="TAAMEER"></div><h1>What are we creating today?</h1><p>Your TAAMEER content partner for hooks, reels, filming ideas, scripts and constructive feedback. Tell me what you have in mind.</p><div class="suggestions">'+[
- ['Find me an idea','Give me four simple reel ideas I can record today'],
- ['Write a reel','Write a 30-second reel script for property buyers in Qatar'],
- ['Improve my content','Help me make my next video more engaging']
- ].map(([label,prompt])=>'<button class="suggest" data-prompt="'+esc(prompt)+'"><strong>'+esc(label)+'</strong><span>'+esc(prompt)+'</span></button>').join('')+'</div></div>';return
+ target.innerHTML='<div class="empty"><div class="empty-mark"><img src="'+mark+'" alt="TAAMEER"></div><h1>What are we creating today?</h1><p>Ask about Qatar real estate, develop a reel idea or get help writing an informed script. Factual answers include the sources behind them.</p><div class="suggestions">'+[
+ ['At the showroom','I am at the showroom. Suggest a useful reel to shoot right now.'],
+ ['Property ownership','Explain property ownership and residency rules for foreigners in Qatar with official sources.'],
+ ['Explore Lusail','What should buyers know about Lusail? Include verified information and sources.']
+ ].map(([label,prompt])=>'<button class="suggest" data-prompt="'+esc(prompt)+'"><strong>'+esc(label)+'</strong><span>'+esc(prompt)+'</span></button>').join('')+'</div></div>';return;
  }
- target.innerHTML=state.messages.map((m,i)=>m.me?'<div class="message me"><div class="bubble">'+esc(m.body)+'</div></div>':'<div class="message"><div class="assistant-symbol"><img src="'+mark+'" alt="TAAMEER"></div><div class="answer"><div>'+esc(m.body)+'</div><div class="answer-actions"><button data-copy="'+i+'">Copy</button><button data-save="'+i+'">Save</button><button data-follow="Make it shorter">Shorter</button><button data-follow="Try another version">Another version</button></div></div></div>').join('');
- const sc=$('scroll');sc.scrollTop=sc.scrollHeight
+ target.innerHTML=state.messages.map((m,i)=>{
+ if(m.me)return'<div class="message me"><div class="bubble">'+fmt(m.body)+'</div></div>';
+ const sources=(m.sources||[]).map(x=>{const url=safeSource(x.url);return url?'<a class="answer-source" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'"><span class="source-index">['+Number(x.number||1)+']</span> '+esc(x.title)+'</a>':''}).filter(Boolean).join('');
+ const footer=m.pending?'<span class="thinking-dots">Working on it…</span>':'<div class="answer-actions"><button data-copy="'+i+'">Copy</button><button data-save="'+i+'">Save</button><button data-follow="Make it shorter">Shorter</button><button data-follow="Try another version">Another version</button></div>';
+ return'<div class="message"><div class="assistant-symbol"><img src="'+mark+'" alt="TAAMEER"></div><div class="answer"><div class="answer-text">'+fmt(m.body)+'</div>'+(sources?'<div class="answer-sources"><div class="source-title">Sources · Verified reference library</div>'+sources+'</div>':'')+footer+'</div></div>';
+ }).join('');
+ const sc=$('scroll');sc.scrollTop=sc.scrollHeight;
 }
 function renderTags(){
  const t=$('tags');if(!t)return;const p=currentProject();
@@ -214,7 +221,24 @@ async function clickHandler(e){const t=e.target.closest('button');if(!t)return;c
  }
  if(t.dataset.rename){renameThread(t.dataset.rename);return}
  if(t.dataset.delete){deleteThread(t.dataset.delete);return}if(a==='logout'){logout();return}if(a==='saved'){state.drawer='saved';renderDrawer();return}if(a==='close'){state.drawer=null;renderDrawer();return}if(a==='send'){send();return}if(a==='review'){const input=$('message-input');input.value='Please review this script and suggest improvements:\n\n';input.focus();return}if(a==='filming'){send('Give me a filming plan for a simple Instagram reel');return}if(t.dataset.project){state.project=t.dataset.project;renderTags();saveState();return}if(t.dataset.thread){selectThread(t.dataset.thread);return}if(t.dataset.prompt){activeModule='brain';render();send(t.dataset.prompt);return}if(t.dataset.follow){send(t.dataset.follow);return}if(t.dataset.copy!==undefined){const m=state.messages[Number(t.dataset.copy)];if(m)await navigator.clipboard.writeText(m.body);t.textContent='Copied';return}if(t.dataset.save!==undefined){const m=state.messages[Number(t.dataset.save)],p=currentProject();if(!m)return;try{const r=await request('create',{kind:'idea',content:{body:m.body,hook:m.body.split('\n')[0],project:p.name,created:now()}});state.saved.unshift(r.item);t.textContent='Saved ✓'}catch{t.textContent='Could not save'}return}if(t.dataset.draftCopy){const d=findSaved(t.dataset.draftCopy);if(d)await navigator.clipboard.writeText(d.content?.body||d.content?.script||'');t.textContent='Copied';return}if(t.dataset.draftUse){const d=findSaved(t.dataset.draftUse);if(d){state.drawer=null;state.messages.push({me:false,body:d.content?.body||d.content?.script||'',type:'saved'});persistThread();render()}return}if(t.dataset.draftDelete){try{await request('delete',{id:t.dataset.draftDelete});state.saved=state.saved.filter(x=>x.id!==t.dataset.draftDelete);state.plans=state.plans.filter(x=>x.id!==t.dataset.draftDelete);renderDrawer()}catch{alert('Could not delete draft')}return}}
-function send(preset){const field=$('message-input');const q=toText(preset||field?.value);if(!q||state.loading)return;state.messages.push({me:true,body:q});const result=answer(q);state.messages.push({me:false,body:result.body,type:result.type});persistThread();renderMessages();renderTags();if(field){field.value='';field.focus()}}
+async function send(preset){
+ const field=$('message-input'),q=toText(preset||field?.value);if(!q||state.loading)return;
+ const thread=state.threadId;state.loading=true;
+ state.messages.push({me:true,body:q});
+ if(field){field.value='';field.focus()}
+ const history=state.messages.slice(-18).map(m=>({role:m.me?'user':'assistant',content:m.body}));
+ state.messages.push({me:false,body:'',pending:true});
+ renderMessages();renderTags();
+ try{
+   const res=await request('chat',{question:q,messages:history});
+   if(state.threadId===thread)state.messages[state.messages.length-1]={me:false,body:res.text||'No response returned.',sources:res.sources||[],engine:res.engine||'verified_rules'};
+ }catch(e){
+   if(state.threadId===thread)state.messages[state.messages.length-1]={me:false,body:'The knowledge service is temporarily unavailable. Please retry. I cannot verify project facts offline.'};
+ }finally{
+   state.loading=false;
+   if(state.threadId===thread){persistThread();renderMessages();renderTags()}
+ }
+}
 function render(){if(!isLogged())entryView();else shell()}
 async function start(){const saved=storage();state.last=saved.last||0;state.token=saved.token||null;state.project=saved.project||'general';state.modeTag=saved.modeTag||'Ideas';state.threads=Array.isArray(saved.threads)?saved.threads:[];state.threadId=saved.threadId||null;let t=state.threads.find(x=>x.id===state.threadId);if(t)state.messages=t.messages||[];else newThread(false);if(state.token&&!timedOut()){try{await request('verify');state.mode='sales';await loadData();render();return}catch{state.token=null}}state.token=null;const {data}=await sb.auth.getSession();if(data.session){const r=await sb.from('profiles').select('role').eq('id',data.session.user.id).maybeSingle();if(r.data?.role==='admin'){state.mode='admin';state.last=now();await loadData();render();return}}state.mode=null;render()}
 start();
