@@ -321,3 +321,20 @@
 .agents-layout.nonchat-workspace .chat-inner{width:100%;max-width:1200px;margin:0 auto}
 .agents-layout.nonchat-workspace .references-page{max-width:1140px;margin:0 auto}
 .agents-layout.nonchat-workspace .topbar .topright{margin-left:auto}
+
+/* Compact and dependable reel references: no empty player or giant dark iframe */
+.reference-results{align-items:start}
+.reference-card-compact{box-shadow:0 5px 18px #19232e09}
+.reference-card-compact .reference-thumb-compact{display:flex;position:relative;aspect-ratio:16/9;min-height:0;justify-content:center;align-items:center;background:linear-gradient(145deg,#4b4e51,#2d3033);text-decoration:none;overflow:hidden}
+.reference-thumb-compact img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s}
+.reference-thumb-compact:hover img{transform:scale(1.03)}
+.reference-graphic{display:flex;align-items:center;justify-content:center;gap:14px;flex-direction:column;color:#fff}
+.reference-graphic-icon{width:53px;height:53px;display:grid;place-items:center;border:1px solid #ffffff7d;border-radius:50%;font-size:19px;padding-left:3px;background:#ffffff18}
+.reference-graphic small{font-size:10px;font-weight:750;letter-spacing:.13em;color:#cbd0d3}
+.reference-image-cta{position:absolute;bottom:11px;right:11px;display:inline-flex;padding:7px 10px;color:#fff;font-size:10px;font-weight:700;background:#17191eb8;border-radius:7px}
+.reference-card-compact .reference-info{padding:16px 17px;gap:7px}
+.reference-card-compact .reference-info h2{font-size:16px}
+.reference-card-compact .reference-info p{font-size:11px;line-height:1.65;color:#7f858b}
+.reference-card-compact .reference-platform{z-index:2}
+.reference-card-compact .reference-actions{margin-top:5px;padding-top:12px}
+@media(max-width:800px){.reference-card-compact .reference-thumb-compact{aspect-ratio:16/9}}
