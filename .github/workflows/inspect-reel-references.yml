@@ -29,6 +29,15 @@ jobs:
                       metadata=json.load(r)
                   for k in ['title','author_name','author_url','thumbnail_url','embed_product_id','thumbnail_width','thumbnail_height']:
                       if metadata.get(k):print(k.upper()+'='+str(metadata[k]),flush=True)
+                  import html,re
+                  try:
+                      with urllib.request.urlopen(urllib.request.Request(target,headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120.0 Safari/537.36','Accept-Language':'en-US,en;q=0.9'}),timeout=12) as p:
+                          page=p.read(3000000).decode('utf-8','replace')
+                      for prop in ['og:image','twitter:image','og:title','twitter:title']:
+                          m=re.search(r'<meta[^>]*(?:property|name)=[\"\\']'+re.escape(prop)+r'[\"\\'][^>]*content=[\"\\']([^\"\\']+)',page,re.I)
+                          if not m:m=re.search(r'<meta[^>]*content=[\"\\']([^\"\\']+)[\"\\'][^>]*(?:property|name)=[\"\\']'+re.escape(prop)+r'[\"\\']',page,re.I)
+                          if m:print('PAGE_'+prop.upper().replace(':','_')+'='+html.unescape(m.group(1))[:1600],flush=True)
+                  except Exception as inner:print('PAGE_META_ERROR='+str(inner)[:180],flush=True)
               except Exception as e:
                   print('LOOKUP_ERROR='+str(e)[:300],flush=True)
               print(f'REFERENCE_{index}_END',flush=True)
