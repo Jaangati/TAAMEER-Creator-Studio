@@ -407,3 +407,9 @@
 .reference-loading-poster small{font-size:10px;font-weight:600;letter-spacing:.04em;color:#c8cdd1}
 .reference-loading-poster a{color:#fff;text-decoration:none;border:1px solid #ffffff45;padding:6px 10px;border-radius:7px;font-size:10px}
 .reference-loading-poster a:hover{background:#ffffff25}
+
+/* Quiet manual retry for occasional upstream TikTok 429 responses */
+.reference-card .reference-actions{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
+.reference-card .reference-actions .reference-open{font-size:10px;gap:6px}
+.reference-retry{border:0;background:transparent;padding:4px 0;color:#899098;font-size:9px;cursor:pointer;white-space:nowrap}
+.reference-retry:hover{color:#3b3e40;text-decoration:underline}
