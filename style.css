@@ -251,3 +251,20 @@
 .selected-followups span{font-size:10px;color:#8c929b;font-weight:700;margin-right:2px}
 .selected-followups button{border:1px solid #e0e4e9;border-radius:20px;padding:7px 11px;background:#f8f9fa;color:#505861;font-size:11px}
 .selected-followups button:hover{border-color:#bcc4ce;background:#eef0f3}
+
+/* Clear creative hierarchy: idea and spoken words are the core deliverables */
+.reel-output{margin:3px 0 20px;max-width:780px;display:flex;flex-direction:column;gap:17px}
+.reel-eyebrow{font-size:10px;letter-spacing:.15em;font-weight:800;color:#818992}
+.reel-output h3{font-size:clamp(18px,2.1vw,24px);font-weight:760;line-height:1.42;letter-spacing:-.035em;margin:0;color:#24292e}
+.spoken-section{border-radius:17px;border:1px solid #d9dde2;background:#f7f8fa;overflow:hidden;box-shadow:0 7px 18px #16202b08}
+.spoken-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 21px 11px;border-bottom:1px solid #e1e4e8}
+.spoken-header span{font-size:10px;font-weight:800;letter-spacing:.065em;color:#555d66}
+.script-copy{background:white;border:1px solid #dce0e4;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#3e464d;white-space:nowrap}
+.script-copy:hover{background:#e9ecef;border-color:#c2c8d0}
+.spoken-script{border:0;margin:0;padding:22px 23px 26px;background:transparent;white-space:pre-wrap;word-break:normal;overflow-wrap:anywhere;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:clamp(15px,1.8vw,18px);font-weight:520;letter-spacing:-.013em;line-height:1.93;color:#252a30}
+.spoken-script[dir="rtl"]{font-family:"Segoe UI",Tahoma,Arial,sans-serif;text-align:right;letter-spacing:normal;line-height:2.1}
+.reel-film{display:flex;gap:6px;flex-direction:column;border-top:1px solid #eff0f1;padding-top:4px;color:#757d86}
+.reel-film strong{font-size:10px;letter-spacing:.075em;color:#666e77}
+.reel-film p{font-size:12px;line-height:1.75;margin:0}
+.reel-output+.answer-sources{margin-top:8px}
+@media(max-width:620px){.reel-output{gap:12px}.spoken-header{padding:12px 13px 10px}.spoken-script{padding:16px;font-size:16px}.reel-output h3{font-size:18px}}
