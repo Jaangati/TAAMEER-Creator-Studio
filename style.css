@@ -315,3 +315,9 @@
 .reference-creator{font-size:11px;color:#7b838b;line-height:1.35}
 .reference-thumb:has(.reference-tiktok-frame) .reference-platform{pointer-events:none;z-index:2}
 @media(max-width:800px){.reference-thumb:has(.reference-tiktok-frame){aspect-ratio:9/15.5}}
+
+/* Module separation: conversation controls belong only to Creator Brain */
+.agents-layout.nonchat-workspace .stage{min-width:0;flex:1;width:auto}
+.agents-layout.nonchat-workspace .chat-inner{width:100%;max-width:1200px;margin:0 auto}
+.agents-layout.nonchat-workspace .references-page{max-width:1140px;margin:0 auto}
+.agents-layout.nonchat-workspace .topbar .topright{margin-left:auto}
