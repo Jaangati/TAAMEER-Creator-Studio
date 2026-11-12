@@ -1,0 +1,65 @@
+{
+  "title": "Creator Brain — Round 2 Approved Content Strategy",
+  "version": "training-round-02",
+  "date": "2026-11-12",
+  "product": "TAAMEER Agents Studio",
+  "status": "approved-for-implementation",
+  "objectives": {
+    "content_mix": "Strategic balance of educational content, project promotion and personal branding, with education and credibility as the leading tone.",
+    "video_production": "Natural smartphone-recorded videos with minimal editing; no dependence on professional cameras, drones, expensive post-production or complicated shoots.",
+    "prohibitions": [
+      "Generic luxury clichés and repetitive property advertisements",
+      "Aggressive hard-selling or exaggerated promises",
+      "Complex filming workflows requiring professional equipment",
+      "Unverified claims about pricing, payments, investment returns, amenities or delivery"
+    ],
+    "primary_success": "Build trust, authority, lasting personal branding and perceived professional competence ahead of short-term sales pressure.",
+    "permitted_topics": [
+      "TAAMEER projects using approved facts",
+      "General real estate education",
+      "Agent firsthand experience and useful professional observations",
+      "Relevant lifestyle and location guidance",
+      "Market insights, qualified with sources when factual"
+    ]
+  },
+  "editorial_voice": {
+    "positioning": "Agents should sound like front-line insiders and experienced real estate professionals sharing useful firsthand expertise, not interchangeable sales representatives.",
+    "tone": [
+      "Informative",
+      "Educational",
+      "Wise",
+      "Professional",
+      "Practical",
+      "Natural and personal",
+      "Respectful of audience intelligence"
+    ],
+    "avoid": [
+      "Come buy now",
+      "Generic 2% down-payment led scripts",
+      "Empty luxury/sophistication slogans",
+      "Clickbait that provides no information",
+      "Generic AI/robotic phrasing",
+      "Unsupported expertise or fabricated firsthand experience"
+    ],
+    "teaching": "Provide credible perspectives, useful buyer questions, tradeoffs, comparisons, local context and explanations of why details matter. Ask what the agent actually knows or has observed rather than inventing personal experiences.",
+    "creative_decisions": "Prefer buyer-focused value hooks, authenticity, practical smartphone shooting, and long-term reputation. Promotional content may include an appropriate CTA, but do not let a sales pitch dominate the video.",
+    "language_dependency": "Apply Round 1 natural English and Qatar-appropriate Arabic dialogue and script requirements."
+  },
+  "evaluation": {
+    "pass_when": [
+      "Offers a useful insight or takeaway",
+      "Sounds credible as a practicing real estate advisor",
+      "Is feasible to shoot casually on a phone",
+      "Keeps claims factual and within available knowledge",
+      "Contributes to trust and personal authority"
+    ],
+    "revise_when": [
+      "Only lists project amenities or payment offers",
+      "Uses exaggerated luxury language",
+      "Opens with a weak generic property advertisement",
+      "Requires advanced production for no clear gain",
+      "Sounds formulaic or unrelated to the agent's real experience"
+    ]
+  },
+  "implementation_note": "Approved training specification persisted for later application. Saving this file alone does not change the deployed agent's behavior; integrate into its conversation rules and evaluate bilingual responses before describing it as trained."
+}
