@@ -422,3 +422,13 @@
 .reference-thumb-player.is-playing{background:#151515}
 .reference-thumb-player.is-playing iframe{width:100%;height:100%;border:0}
 .reference-card .reference-actions .reference-open{font-size:11px;font-weight:750}
+
+/* Real local cover images: show all 15 instantly, request TikTok only after Play */
+.reference-thumb-player .reference-poster-image{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;z-index:0}
+.reference-thumb-player .reference-loading-poster.has-cover{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(180deg,transparent 0%,#10151b12 40%,#11182066 100%);padding:14px}
+.reference-thumb-player .reference-loading-poster.has-cover .reference-play-btn{gap:8px;padding:8px 12px;background:#1f232988;border:1px solid #ffffff90;border-radius:12px;backdrop-filter:blur(5px)}
+.reference-thumb-player .reference-loading-poster.has-cover .reference-play-btn:hover{background:#1c2025bb;border-color:white;transform:scale(1.03)}
+.reference-thumb-player .reference-loading-poster.has-cover .reference-loading-play{width:43px;height:43px;font-size:18px;border:0;background:transparent}
+.reference-thumb-player .reference-loading-poster.has-cover .reference-play-btn strong{font-size:11px}
+.reference-thumb-player .reference-loading-poster.has-cover>a{position:absolute;bottom:12px;right:10px;background:#151719ad;border:1px solid #ffffff52;color:#fff;font-size:9px;border-radius:8px;text-decoration:none}
+.reference-thumb-player.is-playing .reference-loading-poster,.reference-thumb-player.is-playing .reference-poster-image{display:none}
