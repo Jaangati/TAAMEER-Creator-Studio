@@ -1,0 +1,67 @@
+{
+  "name": "TAAMEER Agents Studio — Reel Reference Library",
+  "version": 1,
+  "notes": "Marketing-curated external examples. Only attach thumbnails, creative descriptions, production difficulty and topic tags after the original video has been inspected. Never copy an external creator's video or script verbatim.",
+  "references": [
+    {
+      "id": "tiktok-zspd7u3jx",
+      "platform": "TikTok",
+      "url": "https://vt.tiktok.com/ZSpD7U3Jx/",
+      "title": "Reel Reference 01",
+      "description": "Reference shared by TAAMEER Marketing. Video content not yet independently reviewed.",
+      "thumbnail_url": null,
+      "creator": null,
+      "duration_seconds": null,
+      "tags": [
+        "TikTok",
+        "Pending review"
+      ],
+      "review_status": "pending_review",
+      "difficulty": "Not assessed",
+      "format": "To be confirmed",
+      "creative_notes": "Review video content before assigning a format, hook or filming guidance.",
+      "added_on": "2026-11-12",
+      "source": "Marketing submission"
+    },
+    {
+      "id": "tiktok-zspd7ypwe",
+      "platform": "TikTok",
+      "url": "https://vt.tiktok.com/ZSpD7ypWE/",
+      "title": "Reel Reference 02",
+      "description": "Reference shared by TAAMEER Marketing. Video content not yet independently reviewed.",
+      "thumbnail_url": null,
+      "creator": null,
+      "duration_seconds": null,
+      "tags": [
+        "TikTok",
+        "Pending review"
+      ],
+      "review_status": "pending_review",
+      "difficulty": "Not assessed",
+      "format": "To be confirmed",
+      "creative_notes": "Review video content before assigning a format, hook or filming guidance.",
+      "added_on": "2026-11-12",
+      "source": "Marketing submission"
+    },
+    {
+      "id": "tiktok-zspd7fcrs",
+      "platform": "TikTok",
+      "url": "https://vt.tiktok.com/ZSpD7FcRs/",
+      "title": "Reel Reference 03",
+      "description": "Reference shared by TAAMEER Marketing. Video content not yet independently reviewed.",
+      "thumbnail_url": null,
+      "creator": null,
+      "duration_seconds": null,
+      "tags": [
+        "TikTok",
+        "Pending review"
+      ],
+      "review_status": "pending_review",
+      "difficulty": "Not assessed",
+      "format": "To be confirmed",
+      "creative_notes": "Review video content before assigning a format, hook or filming guidance.",
+      "added_on": "2026-11-12",
+      "source": "Marketing submission"
+    }
+  ]
+}
