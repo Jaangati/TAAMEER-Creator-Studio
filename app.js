@@ -187,7 +187,7 @@ async function loadReelReferences(){
  if(referenceStatus==='loading')return;
  referenceStatus='loading';
  try{
-   const response=await fetch('references/reels.json',{cache:'no-store'});
+   const response=await fetch('references/reels.json?v=20261112-classified-v5',{cache:'no-store'});
    if(!response.ok)throw Error('Reference library unavailable');
    const parsed=await response.json();
    reelReferences=Array.isArray(parsed.references)?parsed.references.filter(x=>x&&/^https:\/\//.test(x.url)&&x.id):[];
@@ -233,7 +233,7 @@ function referenceTagHtml(name,isFilter=false){
 }
 function renderReferenceLibrary(){
  const area=$('messages');if(!area)return;
- const tags=['All',...new Set(reelReferences.flatMap(r=>r.tags||[]))].sort((a,b)=>a.localeCompare(b));
+ const tags=['All',...new Set(reelReferences.flatMap(r=>r.tags||[]).filter(t=>t!=='TikTok'&&t!=='Reel Inspiration'))].sort((a,b)=>a.localeCompare(b));
  area.innerHTML='<section class="references-page"><div class="references-heading"><div><p class="module-kicker">TAAMEER MARKETING CURATION</p><h1>Reel Reference Library</h1><p>Short, practical reels selected by TAAMEER Marketing. Explore the filming setup, content format and creative approach, then make your own version.</p></div><span class="reference-count">'+reelReferences.length+' references</span></div><div class="reference-toolbar"><label class="reference-search">⌕ <input id="reference-search" type="search" aria-label="Search references" placeholder="Search references, tags or formats…" value="'+esc(referenceSearch)+'"></label><div class="reference-filters">'+tags.map(t=>t==='All'?'<button class="reference-filter '+(referenceTag==='All'?'active':'')+'" data-reference-tag="All">All</button>':referenceTagHtml(t,true)).join('')+'</div></div><div class="reference-results" id="reference-results"></div><div class="reference-footnote">Shared by TAAMEER Group Marketing Department. Examples are for creative study; adapt the approach, not another creator\'s exact wording or footage.</div></section>';
  const input=$('reference-search');if(input)input.oninput=ev=>{referenceSearch=ev.target.value;renderReferenceCards()};
  renderReferenceCards();
@@ -303,7 +303,7 @@ function renderReferenceCards(){
   const image=thumb?'<img loading="lazy" alt="Original reel cover image" src="'+esc(thumb)+'">':'<span class="reference-graphic"><span class="reference-graphic-icon">▶</span><small>Preview loads when visible</small></span>';
   const media=validTikTokId?'<div class="reference-thumb reference-thumb-player reference-player-waiting" data-video-id="'+esc(videoId)+'" data-title="'+esc(r.title)+'"><div class="reference-loading-poster"><span class="reference-loading-play">▶</span><small>Loading TikTok preview…</small><a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Open original ↗</a></div></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
   const detail=r.description&& !/original tiktok video reference shared by/i.test(r.description)?r.description:'A TAAMEER Marketing reference. Open the original reel to explore its format and filming style.';
-  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a>'+(validTikTokId?'<button class="reference-retry" data-reload-video="'+videoId+'" title="Reload the TikTok embed if it fails">↻ Reload video</button>':'')+'</div></div></article>';
+  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.filter(t=>t!=='TikTok'&&t!=='Reel Inspiration').map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a>'+(validTikTokId?'<button class="reference-retry" data-reload-video="'+videoId+'" title="Reload the TikTok embed if it fails">↻ Reload video</button>':'')+'</div></div></article>';
  }).join(''):'<p class="references-empty">No references match your search or selected tag.</p>';
  setupProgressiveReelPlayers();
 }
