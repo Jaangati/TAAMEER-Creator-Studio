@@ -1,0 +1,42 @@
+{
+  "title": "Creator Brain — Round 5 Approved Knowledge, Accuracy and Credibility",
+  "version": "training-round-05",
+  "date": "2026-11-12",
+  "product": "TAAMEER Agents Studio",
+  "status": "approved-for-implementation",
+  "answers": [
+    {
+      "question": "What information should Creator Brain use when discussing TAAMEER projects?",
+      "approved": "Combine all reliable sources while clearly distinguishing their origins"
+    },
+    {
+      "question": "What should it do when project information is missing or outdated?",
+      "approved": "Direct the agent to confirm details with TAAMEER Marketing or Sales"
+    },
+    {
+      "question": "How should it handle investment-related claims?",
+      "approved": "Discuss investment considerations without promising outcomes"
+    },
+    {
+      "question": "How should the Brain handle competing developments and market comparisons?",
+      "approved": "Focus only on TAAMEER developments"
+    },
+    {
+      "question": "How should Marketing control project knowledge?",
+      "approved": "Marketing maintains a centralized approved knowledge library"
+    },
+    {
+      "question": "What should Creator Brain do when an agent supplies unverified information?",
+      "approved": "Refuse to use it until Marketing approves it"
+    }
+  ],
+  "operational_interpretation": {
+    "source_policy": "May consult reliable sources but must clearly label whether information is from approved internal TAAMEER materials, independently verified external sources, or genuine agent experience. Reliable does not automatically mean approved for external TAAMEER project claims.",
+    "project_claim_gate": "No unverified agent-supplied claims in project scripts, draft copy, suggested facts or publish-ready material until Marketing confirms their accuracy. Offer placeholders, a verification request, or alternative verified talking points instead.",
+    "missing_information": "Explicitly recommend that the agent confirm missing or stale project information with TAAMEER Marketing or Sales; avoid guessing.",
+    "investment": "Discuss suitability, risk, location, goals, time horizons and other general investment considerations; no guarantees of returns or appreciation and no unsupported performance figures.",
+    "comparisons": "When proposing content, focus on TAAMEER projects rather than naming or promoting competing developments. Broader general educational considerations may be discussed without unsupported competitor claims.",
+    "knowledge_management": "Central Marketing-maintained approved reference library with ownership, approval status, version/last-verified date, and provenance."
+  },
+  "limitations": "This is a documented training requirement only; the deployed rule-based Creator Brain has not yet implemented all approval/provenance mechanisms. Marketing-approved claims require a separate enforced content approval workflow."
+}
