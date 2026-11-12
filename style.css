@@ -390,3 +390,20 @@
 .reference-filters .ref-tag{padding:5px 9px;font-size:10px;gap:4px}
 .reference-filters .ref-tag-icon{font-size:11px;min-width:11px}
 @media(max-width:700px){.reference-filters{gap:4px}.reference-filters .reference-filter{padding:5px 7px;font-size:9px}.reference-filters .ref-tag{font-size:9px;padding:5px 7px}}
+
+/* Compact tags: override legacy .reference-tags span styles that padded each nested icon/label */
+.reference-card .reference-tags{display:flex;flex-flow:row wrap;gap:4px;margin-top:6px;align-items:flex-start}
+.reference-card .reference-tags > .ref-tag{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;max-width:100%;padding:3px 7px;border-radius:6px;min-height:0;font-size:9px;font-weight:650;line-height:1.35}
+.reference-card .reference-tags > .ref-tag > span{display:inline;font-size:inherit;line-height:inherit;font-weight:inherit;padding:0;margin:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:inherit;min-width:0;white-space:inherit}
+.reference-card .reference-tags > .ref-tag > .ref-tag-icon{font-size:10px;display:inline-block;min-width:10px;line-height:1;text-align:center}
+.reference-card .reference-info{gap:5px;padding:12px 12px 13px}
+.reference-card .reference-info > p{font-size:10px;line-height:1.5;margin:0}
+.reference-card .reference-card-meta{font-size:9px;letter-spacing:.025em}
+.reference-card .reference-actions{padding-top:9px;margin-top:6px}
+/* Lightweight progressive video placeholders; loaded players retain official TikTok embed */
+.reference-thumb-player.reference-player-waiting{background:linear-gradient(155deg,#42474c,#26292d)}
+.reference-loading-poster{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;color:#eff1f3;width:100%;height:100%;text-align:center;padding:14px}
+.reference-loading-play{display:grid;place-items:center;padding-left:4px;width:49px;height:49px;border-radius:50%;border:1px solid #ffffff65;background:#ffffff10;font-size:17px}
+.reference-loading-poster small{font-size:10px;font-weight:600;letter-spacing:.04em;color:#c8cdd1}
+.reference-loading-poster a{color:#fff;text-decoration:none;border:1px solid #ffffff45;padding:6px 10px;border-radius:7px;font-size:10px}
+.reference-loading-poster a:hover{background:#ffffff25}
