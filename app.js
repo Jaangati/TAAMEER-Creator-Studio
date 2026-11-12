@@ -199,10 +199,10 @@ function extractCreativeOptions(body){
 function renderMessages(){
  const target=$('messages');if(!target)return;
  if(!state.messages.length){
- target.innerHTML='<div class="empty"><div class="empty-mark"><img src="'+mark+'" alt="TAAMEER"></div><h1>What are we creating today?</h1><p>Ask about Qatar real estate, develop a reel idea or get help writing an informed script. Factual answers include the sources behind them.</p><div class="suggestions">'+[
- ['At the showroom','I am at the showroom. Suggest a useful reel to shoot right now.'],
- ['Property ownership','Explain property ownership and residency rules for foreigners in Qatar with official sources.'],
- ['Explore Lusail','What should buyers know about Lusail? Include verified information and sources.']
+ target.innerHTML='<div class="empty"><div class="empty-mark"><img src="'+mark+'" alt="TAAMEER"></div><h1>What shall we film today?</h1><p>Pick a video idea. I'll write the exact script you can say on camera, then help you make it sound like you.</p><div class="suggestions">'+[
+ ['Give me reel ideas','Suggest four informative real estate reel ideas for a sales agent'],
+ ['Write me a script','Write me a natural spoken 30-second reel script for a Qatar real estate agent'],
+ ['I am at the showroom','Suggest four reel ideas I can film in the showroom today']
  ].map(([label,prompt])=>'<button class="suggest" data-prompt="'+esc(prompt)+'"><strong>'+esc(label)+'</strong><span>'+esc(prompt)+'</span></button>').join('')+'</div></div>';return;
  }
  target.innerHTML=state.messages.map((m,i)=>{
