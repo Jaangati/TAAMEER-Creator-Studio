@@ -1,0 +1,338 @@
+{
+  "version": "1.0.0",
+  "language": [
+    "en",
+    "ar-QA"
+  ],
+  "method": "25 individually authored bilingual scripts × 8 framing choices × 6 audiences = 2400 ready-to-compose targeted spoken-script variants. Each variant includes a reel concept, exact spoken copy and simple recording note. This is a structured combinatorial library, not 2400 independently hand-authored scripts.",
+  "themes": [
+    {
+      "id": "location-vs-address",
+      "title": "Location is more than the district name",
+      "en": "A district name sounds impressive, but I look at the actual route to work, what you can reach on foot, and the services around the building. Two apartments in the same area can give you very different daily routines. That's why I prefer to visit the exact street, not just look at a pin.",
+      "ar": "اسم المنطقة بروحه ما يكفي. أنا أشوف الطريق للدوام، والخدمات اللي تقدر توصل لها، والشارع اللي عليه المبنى. شقتين بنفس المنطقة ممكن تعطونك تجربة يومية مختلفة تماماً. عشان جذي أحب أشوف الموقع الفعلي، مو بس الدبوس على الخريطة.",
+      "tags": [
+        "location",
+        "walkthrough",
+        "commute",
+        "lusail",
+        "pearl"
+      ]
+    },
+    {
+      "id": "floorplan",
+      "title": "The floor plan tells you more than the photos",
+      "en": "A beautiful render is nice, but the floor plan tells me how someone will actually live in a space. I check where the furniture fits, whether the rooms have privacy, and how people move around the apartment. A good layout is something you feel every single day.",
+      "ar": "الرندر الحلو يجذب، بس المخطط هو اللي يوضح لك شلون بتعيش داخل الشقة. أنا أشوف وين ينحط الأثاث، وخصوصية الغرف، وحركة الناس بالمكان. التوزيع المريح تحس فيه كل يوم، مو بس يوم الزيارة.",
+      "tags": [
+        "layout",
+        "plan",
+        "design",
+        "apartment"
+      ]
+    },
+    {
+      "id": "showroom-questions",
+      "title": "The question to ask before entering a showroom",
+      "en": "Before I show a client a model, I ask one question: are we choosing a home for your life now, or an investment for a different goal? That answer changes which details matter. A useful showroom visit starts with a clear purpose, not with collecting brochures.",
+      "ar": "قبل أعرض على العميل أي مجسم، أسأله سؤال واحد: ندور بيت يناسب حياتك الحين، أو عقار لهدف استثماري؟ الجواب يغيّر التفاصيل اللي نركز عليها. زيارة المعرض المفيدة تبدأ بهدف واضح، مو بتجميع بروشورات.",
+      "tags": [
+        "showroom",
+        "viewing",
+        "questions",
+        "filming"
+      ]
+    },
+    {
+      "id": "compare-units",
+      "title": "Why similar apartments aren't the same decision",
+      "en": "Two apartments can have a similar price and still serve completely different needs. One might have a layout that suits a family, while another has access that fits a busy professional. I compare the use first, then the numbers, then the details that need verification.",
+      "ar": "ممكن تشوف شقتين بأسعار متقاربة، بس كل وحدة تناسب احتياج مختلف. وحدة توزيعها أريح للعائلة، والثانية موقعها أنسب لشخص دوامه قريب. أنا أقارن الاستخدام أول، وبعدها الأرقام والتفاصيل اللي لازم نتأكد منها.",
+      "tags": [
+        "comparison",
+        "budget",
+        "buyer"
+      ]
+    },
+    {
+      "id": "service-charges",
+      "title": "A cost buyers sometimes forget to ask about",
+      "en": "When someone calculates the cost of ownership, I remind them to ask about ongoing service charges and maintenance obligations. The purchase price is only part of the picture. Getting the full cost clarified early makes the decision more comfortable later.",
+      "ar": "يوم الواحد يحسب تكلفة التملك، أنبّهه يسأل عن رسوم الخدمات والالتزامات المستمرة. سعر الشقة مب الصورة كاملة. كل ما وضحت التكاليف من البداية، صار القرار أريح بعدين.",
+      "tags": [
+        "fees",
+        "service charges",
+        "maintenance",
+        "cost"
+      ]
+    },
+    {
+      "id": "viewing-checklist",
+      "title": "How to make a property viewing useful",
+      "en": "A viewing shouldn't be just a walk through nice rooms. I suggest checking the layout, natural light, practical access and the questions you still need answered. Take a few notes, because details that seem small in the moment can matter a lot later.",
+      "ar": "زيارة العقار مو بس تمشي بين غرف حلوة. ركّز على توزيع المساحة، والإضاءة، وسهولة الوصول، والأسئلة اللي للحين ما جاوبت عليها. خذ لك ملاحظات بسيطة؛ التفاصيل الصغيرة اليوم ممكن تفرق معك بعدين.",
+      "tags": [
+        "viewing",
+        "showroom",
+        "tour",
+        "checklist"
+      ]
+    },
+    {
+      "id": "lifestyle",
+      "title": "Think about the life, not only the building",
+      "en": "When I talk about a property, I try to imagine an ordinary Tuesday there, not just a weekend. How easy is the commute? Where would you run your errands? Would the building fit the way you actually spend your time? That's the difference between an impressive place and a practical home.",
+      "ar": "لما أتكلم عن عقار، أفكر بيوم عادي من الأسبوع، مو بس الويكند. شلون مشوار الدوام؟ وين تقضي احتياجاتك؟ وهل المكان يناسب روتينك فعلاً؟ هني يبان الفرق بين مكان شكله حلو وبيت يناسب حياتك.",
+      "tags": [
+        "lifestyle",
+        "area",
+        "home"
+      ]
+    },
+    {
+      "id": "buyer-priorities",
+      "title": "Three priorities, not twenty requirements",
+      "en": "A buyer can walk into a showroom with a long list, and that's normal. But I always try to identify the three things that really matter. Once we know those priorities, it's easier to compare options without getting distracted by every nice-looking detail.",
+      "ar": "طبيعي العميل يدخل المعرض وعنده قائمة طويلة. بس أنا أحب أحدد معه أهم ثلاث أولويات فعلاً. يوم نعرفها، تصير مقارنة الخيارات أسهل، وما نتشتت بكل تفصيلة شكلها حلو.",
+      "tags": [
+        "priorities",
+        "buyer",
+        "showroom"
+      ]
+    },
+    {
+      "id": "investment-risks",
+      "title": "An investment conversation without promises",
+      "en": "If you're considering a property as an investment, the conversation shouldn't start with a promised return. I would ask about your time horizon, possible running costs, vacancy risk and how easily you might need to sell. A good decision looks at risks alongside potential benefits.",
+      "ar": "إذا تفكر بالعقار كاستثمار، ما أحب أبدأ الحديث بوعد بعائد. أسأل عن المدة اللي ناوي تحتفظ فيها بالعقار، والتكاليف، واحتمال فترات بدون تأجير، ومدى سهولة البيع. القرار الجيد يشوف المخاطر مع المزايا.",
+      "tags": [
+        "investment",
+        "risk",
+        "roi",
+        "yield"
+      ]
+    },
+    {
+      "id": "timing",
+      "title": "When should you start exploring properties?",
+      "en": "I don't think a buyer needs to rush just because they saw an advertisement. A better starting point is knowing the budget range, what kind of home they need, and the timing that suits them. Once those are clear, every viewing becomes more purposeful.",
+      "ar": "ما أشوف إن الواحد لازم يستعجل بس لأنه شاف إعلان. البداية الأفضل يعرف نطاق ميزانيته، ونوع العقار اللي يحتاجه، والوقت المناسب له. يوم تتضح هالأشياء، كل زيارة تصير لها فايدة.",
+      "tags": [
+        "timing",
+        "planning",
+        "budget"
+      ]
+    },
+    {
+      "id": "personal-experience",
+      "title": "A real observation makes better content",
+      "en": "The most useful property videos often come from questions people actually ask. Think of something a buyer asked you this week, explain why it matters, and share how you approach it professionally. That's more valuable than repeating the same promotional line.",
+      "ar": "أقوى فيديوهات العقار غالباً تطلع من أسئلة الناس الحقيقية. تذكر سؤال سألك إياه عميل هالأسبوع، ووضح ليش السؤال مهم، وشنو طريقتك المهنية في التعامل معه. هالمحتوى أقوى من تكرار نفس الجملة الإعلانية.",
+      "tags": [
+        "personal",
+        "experience",
+        "insider"
+      ]
+    },
+    {
+      "id": "transport",
+      "title": "Transport links need to be checked",
+      "en": "People sometimes assume a nearby station means an easy commute. I prefer to verify which service is actually running, where the entrance is, and how long the walk really takes. A route on a master plan isn't always the same as a journey you can make today.",
+      "ar": "بعض الناس يشوفون محطة قريبة على الخريطة ويتوقعون المشوار سهل. أنا أفضل أتأكد من الخدمة اللي تشتغل فعلاً، ومكان المدخل، وكم يستغرق المشي. الخط المرسوم بالمخطط مو بالضرورة يعني رحلة تقدر تسويها اليوم.",
+      "tags": [
+        "tram",
+        "water taxi",
+        "metro",
+        "transport",
+        "lusail"
+      ]
+    },
+    {
+      "id": "waterfront",
+      "title": "Waterfront living has practical questions too",
+      "en": "A waterfront view can be appealing, but I'd still ask practical questions: which side of the building is the unit on, what can you actually see, and what are the day-to-day access arrangements? A location description should never replace checking the specific unit.",
+      "ar": "إطلالة البحر ممكن تكون نقطة جميلة، بس بعد لازم نسأل: الوحدة بأي جهة؟ شنو المنظر الفعلي؟ وشلون الوصول يومياً؟ وصف الموقع ما يغني عن التأكد من الوحدة نفسها.",
+      "tags": [
+        "waterfront",
+        "view",
+        "pearl",
+        "qetaifan",
+        "lusail"
+      ]
+    },
+    {
+      "id": "family",
+      "title": "How a family should assess a home",
+      "en": "For a family, I would look beyond the number of bedrooms. Storage, how the living area connects to the rooms, privacy and daily routines all matter. A space can look large on paper but feel different when the whole family uses it.",
+      "ar": "للعائلة، ما أكتفي بعدد الغرف. أشوف التخزين، وتوزيع الصالة بالنسبة للغرف، والخصوصية، والروتين اليومي. ممكن المساحة على الورق تكون كبيرة، بس استخدام العائلة لها يختلف.",
+      "tags": [
+        "family",
+        "bedroom",
+        "layout"
+      ]
+    },
+    {
+      "id": "first-time",
+      "title": "The first property decision doesn't need to be complicated",
+      "en": "First-time buyers often think they need to understand every real estate term before starting. You don't. Begin with three things: why you're buying, what you can comfortably afford, and which details must be verified before committing. The rest becomes easier to learn step by step.",
+      "ar": "اللي يشتري أول عقار أحياناً يحس لازم يفهم كل مصطلحات السوق قبل يبدأ. مو شرط. ابدأ بثلاثة أشياء: ليش تشتري، شنو المبلغ اللي يناسبك، وشنو التفاصيل اللي لازم تتأكد منها قبل تلتزم. والباقي تتعلمه خطوة خطوة.",
+      "tags": [
+        "first buyer",
+        "education"
+      ]
+    },
+    {
+      "id": "offplan",
+      "title": "Questions before buying off-plan",
+      "en": "With an off-plan property, I focus on documents and timelines, not only renders. Ask what has been officially approved, how the payment stages work, and where the buyer can verify the project's current status. Promises are not a substitute for paperwork.",
+      "ar": "إذا العقار على الخارطة، أنا أركز على المستندات والمواعيد، مو بس الرندرات. اسأل شنو المعتمد رسمياً، وشلون مراحل الدفع، ووين تقدر تتحقق من حالة المشروع. الوعود ما تغني عن الأوراق.",
+      "tags": [
+        "offplan",
+        "construction",
+        "escrow"
+      ]
+    },
+    {
+      "id": "project-model",
+      "title": "What a showroom model can and can't tell you",
+      "en": "A scale model is useful for understanding the overall setting of a development. But it won't answer every question about a specific apartment. I use it to explain the bigger picture, then move to approved floor plans and official documents for unit details.",
+      "ar": "المجسم يفيدك تفهم الصورة العامة للمشروع، بس ما يجاوب عن كل تفصيلة تخص شقة معينة. أنا أستخدمه أول عشان أوضح المكان، وبعدها ننتقل للمخططات والمعلومات المعتمدة للوحدة.",
+      "tags": [
+        "showroom",
+        "model",
+        "planning"
+      ]
+    },
+    {
+      "id": "neighborhood",
+      "title": "A neighborhood isn't one single experience",
+      "en": "Even within one district, streets can feel very different. Some are busier, some are quieter, and access can change from block to block. That's why I encourage people to explore the immediate surroundings instead of relying only on the area name.",
+      "ar": "حتى داخل نفس المنطقة، الشوارع ممكن تختلف. في شوارع حيوية، وفي شوارع أهدأ، والوصول يختلف من مبنى لمبنى. عشان جذي أشجع العميل يشوف محيط العقار نفسه، مو بس اسم المنطقة.",
+      "tags": [
+        "neighborhood",
+        "lusail",
+        "pearl",
+        "location"
+      ]
+    },
+    {
+      "id": "rent-vs-own",
+      "title": "Renting and owning solve different problems",
+      "en": "I wouldn't tell everyone that buying is automatically better than renting. It depends on your plans, flexibility, available funds and how long you expect to stay. A good adviser helps you compare the trade-offs instead of pushing one answer.",
+      "ar": "ما أقول لكل شخص إن التملك أفضل من الإيجار بشكل تلقائي. يعتمد على خططك، ومرونتك، والميزانية المتوفرة، وكم ناوي تقعد. المستشار الجيد يوضح لك الفروقات بدل ما يدفعك لجواب واحد.",
+      "tags": [
+        "rent",
+        "own",
+        "buy"
+      ]
+    },
+    {
+      "id": "natural-light",
+      "title": "The detail photos sometimes miss",
+      "en": "Photos can show you the finishes, but they don't always tell you how a room feels throughout the day. During a viewing, I pay attention to the light, room proportions and how the space connects. Those details affect everyday comfort.",
+      "ar": "الصور تبين التشطيبات، بس ما تعطيك دائماً إحساس الغرفة طول اليوم. يوم أزور العقار، أنتبه للإضاءة، وأبعاد الغرفة، وترابط المساحات. هذي التفاصيل تأثر على الراحة اليومية.",
+      "tags": [
+        "light",
+        "viewing",
+        "home"
+      ]
+    },
+    {
+      "id": "questions-not-pitches",
+      "title": "Why asking is better than pitching",
+      "en": "A common mistake in real estate content is listing features before understanding the person watching. I prefer to start with a useful question, explain what the answer changes, and only then discuss relevant options. That's how a conversation becomes advice.",
+      "ar": "من الأخطاء بالمحتوى العقاري إننا نسرد المميزات قبل ما نفهم الشخص اللي يسمعنا. أنا أفضل أبدأ بسؤال مفيد، وأشرح شنو يغيّر الجواب، وبعدين نتكلم عن الخيارات المناسبة. جذي يصير الحديث نصيحة، مو ضغط بيع.",
+      "tags": [
+        "sales",
+        "questions",
+        "trust"
+      ]
+    },
+    {
+      "id": "resale",
+      "title": "Think about your exit options",
+      "en": "Even if you plan to hold a property for years, it's sensible to understand what could affect a future resale. Location, product type, running costs and market conditions all matter. Nobody can promise what a buyer will pay you later.",
+      "ar": "حتى لو ناوي تحتفظ بالعقار سنين، من المفيد تفهم العوامل اللي ممكن تأثر على البيع مستقبلاً. الموقع، ونوع العقار، والتكاليف، وظروف السوق كلها مهمة. محد يقدر يضمن لك سعر البيع بعدين.",
+      "tags": [
+        "resale",
+        "investment",
+        "liquidity"
+      ]
+    },
+    {
+      "id": "real-estate-terms",
+      "title": "One property term worth understanding",
+      "en": "When someone hears a real estate term for the first time, I try to translate it into a practical question: what does this change for the buyer? Understanding the rights, obligations and documents matters far more than memorizing impressive terminology.",
+      "ar": "يوم العميل يسمع مصطلح عقاري لأول مرة، أحب أحوله لسؤال عملي: شنو يغيّر هالشي بالنسبة لك؟ فهم الحقوق والالتزامات والمستندات أهم من حفظ المصطلحات الكبيرة.",
+      "tags": [
+        "education",
+        "ownership",
+        "terms"
+      ]
+    },
+    {
+      "id": "broker-insight",
+      "title": "What makes an adviser worth listening to",
+      "en": "I don't think a property adviser earns trust by knowing the most slogans. They earn it by asking careful questions, knowing when to verify information, and explaining trade-offs clearly. That's the kind of conversation buyers remember.",
+      "ar": "ما أشوف إن المستشار العقاري يكسب الثقة بالشعارات. يكسبها يوم يسأل صح، ويعرف متى لازم يتأكد من معلومة، ويوضح الفرق بين الخيارات بصراحة. هالنوع من الحديث الناس تتذكره.",
+      "tags": [
+        "personal",
+        "professional",
+        "authority"
+      ]
+    },
+    {
+      "id": "amenities",
+      "title": "Don't count amenities; assess how you use them",
+      "en": "A long amenity list can look attractive. But I'd ask which facilities you will actually use, what access rules apply and whether any additional charges exist. More features aren't automatically more value for every buyer.",
+      "ar": "قائمة المرافق الطويلة ممكن تعجبك، بس أنا أسأل: أي مرافق بتستخدمها فعلاً؟ شنو شروط الوصول لها؟ وهل في تكاليف إضافية؟ زيادة المرافق مو بالضرورة تعني قيمة أكبر لكل شخص.",
+      "tags": [
+        "amenities",
+        "facility",
+        "value"
+      ]
+    }
+  ],
+  "angles": [
+    {
+      "id": "question",
+      "label": "A question buyers rarely ask"
+    },
+    {
+      "id": "mistake",
+      "label": "A mistake worth avoiding"
+    },
+    {
+      "id": "comparison",
+      "label": "Two choices, one important difference"
+    },
+    {
+      "id": "inside",
+      "label": "What I look for as an adviser"
+    },
+    {
+      "id": "myth",
+      "label": "A common assumption to challenge"
+    },
+    {
+      "id": "checklist",
+      "label": "A quick practical checklist"
+    },
+    {
+      "id": "story",
+      "label": "A situation worth thinking about"
+    },
+    {
+      "id": "priority",
+      "label": "What should matter first"
+    }
+  ],
+  "audiences": [
+    "general buyers",
+    "first-time buyers",
+    "families",
+    "investors",
+    "homeowners",
+    "busy professionals"
+  ]
+}
