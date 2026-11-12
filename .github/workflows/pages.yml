@@ -24,6 +24,11 @@ jobs:
       - name: Verify Supabase authentication signer
         run: |
           curl --fail --silent --show-error --retry 3 --retry-delay 2 'https://hylcxekemqttsyfnsiov.supabase.co/functions/v1/creator-studio?health=1' | grep -q '"status":"ok"'
+      - name: Validate Creator Brain and verified sources
+        run: |
+          node --check app.js
+          node -e "const fs=require('fs');const data=JSON.parse(fs.readFileSync('knowledge/qatar-real-estate-verified.json','utf8'));if(data.entries.length<20)throw Error('Missing research');for(const x of data.entries){if(!x.source_title||!x.source_url.startsWith('https://')||!x.verified_on||!x.approval_status)throw Error('Invalid reference '+x.id)}console.log('Validated '+data.entries.length+' sourced facts')"
+          test -s assets/taameer-mark.svg
       - name: Stage static site
         run: |
           mkdir -p dist
