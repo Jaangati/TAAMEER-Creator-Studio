@@ -214,7 +214,7 @@ function renderReferenceCards(){
  target.innerHTML=visible.length?visible.map(r=>{
   const thumb=verifiedThumbnail(r.thumbnail_url);
   const videoId=String(r.tiktok_video_id||'');
-  const validTikTokId=/^\\d{15,21}$/.test(videoId)&&r.platform==='TikTok';
+  const validTikTokId=/^[0-9]{15,21}$/.test(videoId)&&r.platform==='TikTok';
   const image=thumb?'<img loading="lazy" alt="Original reel cover image" src="'+esc(thumb)+'">':'<span class="reference-graphic"><span class="reference-graphic-icon">▶</span><small>OPEN ORIGINAL VIDEO</small></span>';
   const media=validTikTokId?'<div class="reference-thumb reference-thumb-player"><iframe height="578" width="325" src="https://www.tiktok.com/player/v1/'+videoId+'?music_info=1&description=1&autoplay=1&muted=1&embed_from=embed_page" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="'+esc(r.title)+'" allowfullscreen loading="lazy"></iframe></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
   const detail=r.description&& !/original tiktok video reference shared by/i.test(r.description)?r.description:'A reference selected by TAAMEER Marketing. Open the original video to see the format and filming style.';
