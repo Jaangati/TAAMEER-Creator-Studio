@@ -19,8 +19,8 @@ const hooks=['Before you buy in {location}, ask this question.','Most buyers ove
 const formats=['Walk and talk','Talking head','Showroom tour','Voiceover','Buyer checklist','Q&A','Behind the scenes','Location guide','Project introduction','Myth vs fact','Three-point explainer','POV walk-through'];
 const audiences=['First-time buyers','Investors','Families','Luxury buyers','Relocating professionals','Qatar residents','General audience'];
 const angles=['Education','Lifestyle','Location','Investment basics','Objection handling','Project introduction','Personal branding'];
-let S={page:'overview',project:'sama',duration:'30',language:'English',location:'Showroom',audience:'First-time buyers',angle:'Education',user:null,role:'agent',saved:[],plans:[],chat:[],output:'',ideas:[],projectList:projects};
-const E=t=>String(t??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+let S={salesMode:false,salesPassword:'',page:'overview',project:'sama',duration:'30',language:'English',location:'Showroom',audience:'First-time buyers',angle:'Education',user:null,role:'agent',saved:[],plans:[],chat:[],output:'',ideas:[],projectList:projects};
+const API='https://hylcxekemqttsyfnsiov.supabase.co/functions/v1/creator-studio'; async function salesApi(action,payload={}){let r=await fetch(API+'?api=1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,password:S.salesPassword,...payload})});let d=await r.json();if(!r.ok)throw Error(d.error||'Request failed');return d} const E=t=>String(t??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const byId=id=>document.getElementById(id);
 const choice=(items,val)=>items.map(x=>'<option '+(x===val?'selected':'')+'>'+E(x)+'</option>').join('');
 const current=()=>S.projectList.find(p=>p.slug===S.project)||S.projectList[0];
