@@ -182,6 +182,20 @@ function renderWorkspace(){
 }
 function safeSource(url){try{const u=new URL(url);return u.protocol==="https:"&&/^(?:[\w-]+\.)*(?:gov\.qa|lusail\.com|qetaifanprojects\.com|udcqatar\.com|thepeninsulaqatar\.com)$/.test(u.hostname)?u.href:""}catch{return ""}}
 function fmt(s){return esc(s).replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>')}
+function extractCreativeOptions(body){
+ const text=String(body||'');
+ const lines=text.split('\n');
+ const opts=[];
+ for(const line of lines){
+  const m=line.match(/^\s*(\d{1,2})[.)]\s+(.+)$/);
+  if(!m)continue;
+  const number=Number(m[1]);if(number<1||number>10||!m[2]?.trim())continue;
+  if(opts.length && number<=opts[opts.length-1].number)continue;
+  if(/^(?:are|is|do|does|can|why|what)\b/i.test(m[2])&&text.length<60)continue;
+  opts.push({number,title:m[2].trim().slice(0,190)});
+ }
+ return opts.length>=2?opts:[];
+}
 function renderMessages(){
  const target=$('messages');if(!target)return;
  if(!state.messages.length){
@@ -194,7 +208,9 @@ function renderMessages(){
  target.innerHTML=state.messages.map((m,i)=>{
  if(m.me)return'<div class="message me"><div class="bubble">'+fmt(m.body)+'</div></div>';
  const sources=(m.sources||[]).map(x=>{const url=safeSource(x.url);return url?'<a class="answer-source" target="_blank" rel="noopener noreferrer" href="'+esc(url)+'"><span class="source-index">['+Number(x.number||1)+']</span> '+esc(x.title)+'</a>':''}).filter(Boolean).join('');
- const footer=m.pending?'<span class="thinking-dots">Working on it…</span>':'<div class="answer-actions"><button data-copy="'+i+'">Copy</button><button data-save="'+i+'">Save</button><button data-follow="Make it shorter">Shorter</button><button data-follow="Try another version">Another version</button></div>';
+ const options=!m.pending&&m.creativeOptions?m.creativeOptions:(!m.pending&&/idea|reel|hook|concept|options|directions/i.test(m.body)?extractCreativeOptions(m.body):[]);
+ const choices=options.length?'<div class="creative-choices"><div class="choice-heading">Choose a direction to develop</div>'+options.map(opt=>'<button class="choice-button" data-select-option="'+i+':'+opt.number+'"><span class="choice-number">'+opt.number+'</span><span>'+esc(opt.title)+'</span><span class="choice-arrow">→</span></button>').join('')+'</div>':'';
+ const footer=m.pending?'<span class="thinking-dots">Working on it…</span>':choices+'<div class="answer-actions"><button data-copy="'+i+'">Copy</button><button data-save="'+i+'">Save</button><button data-follow="Make it shorter">Shorter</button><button data-follow="Try another version">Another version</button></div>';
  return'<div class="message"><div class="assistant-symbol"><img src="'+mark+'" alt="TAAMEER"></div><div class="answer"><div class="answer-text">'+fmt(m.body)+'</div>'+(sources?'<div class="answer-sources"><div class="source-title">Sources · Verified reference library</div>'+sources+'</div>':'')+footer+'</div></div>';
  }).join('');
  const sc=$('scroll');sc.scrollTop=sc.scrollHeight;
@@ -220,8 +236,15 @@ async function clickHandler(e){const t=e.target.closest('button');if(!t)return;c
   row.appendChild(menu);return
  }
  if(t.dataset.rename){renameThread(t.dataset.rename);return}
- if(t.dataset.delete){deleteThread(t.dataset.delete);return}if(a==='logout'){logout();return}if(a==='saved'){state.drawer='saved';renderDrawer();return}if(a==='close'){state.drawer=null;renderDrawer();return}if(a==='send'){send();return}if(a==='review'){const input=$('message-input');input.value='Please review this script and suggest improvements:\n\n';input.focus();return}if(a==='filming'){send('Give me a filming plan for a simple Instagram reel');return}if(t.dataset.project){state.project=t.dataset.project;renderTags();saveState();return}if(t.dataset.thread){selectThread(t.dataset.thread);return}if(t.dataset.prompt){activeModule='brain';render();send(t.dataset.prompt);return}if(t.dataset.follow){send(t.dataset.follow);return}if(t.dataset.copy!==undefined){const m=state.messages[Number(t.dataset.copy)];if(m)await navigator.clipboard.writeText(m.body);t.textContent='Copied';return}if(t.dataset.save!==undefined){const m=state.messages[Number(t.dataset.save)],p=currentProject();if(!m)return;try{const r=await request('create',{kind:'idea',content:{body:m.body,hook:m.body.split('\n')[0],project:p.name,created:now()}});state.saved.unshift(r.item);t.textContent='Saved ✓'}catch{t.textContent='Could not save'}return}if(t.dataset.draftCopy){const d=findSaved(t.dataset.draftCopy);if(d)await navigator.clipboard.writeText(d.content?.body||d.content?.script||'');t.textContent='Copied';return}if(t.dataset.draftUse){const d=findSaved(t.dataset.draftUse);if(d){state.drawer=null;state.messages.push({me:false,body:d.content?.body||d.content?.script||'',type:'saved'});persistThread();render()}return}if(t.dataset.draftDelete){try{await request('delete',{id:t.dataset.draftDelete});state.saved=state.saved.filter(x=>x.id!==t.dataset.draftDelete);state.plans=state.plans.filter(x=>x.id!==t.dataset.draftDelete);renderDrawer()}catch{alert('Could not delete draft')}return}}
-async function send(preset){
+ if(t.dataset.delete){deleteThread(t.dataset.delete);return}if(a==='logout'){logout();return}if(a==='saved'){state.drawer='saved';renderDrawer();return}if(a==='close'){state.drawer=null;renderDrawer();return}if(a==='send'){send();return}if(a==='review'){const input=$('message-input');input.value='Please review this script and suggest improvements:\n\n';input.focus();return}if(a==='filming'){send('Give me a filming plan for a simple Instagram reel');return}if(t.dataset.project){state.project=t.dataset.project;renderTags();saveState();return}if(t.dataset.thread){selectThread(t.dataset.thread);return}if(t.dataset.prompt){activeModule='brain';render();send(t.dataset.prompt);return}if(t.dataset.selectOption){
+  const [position,number]=t.dataset.selectOption.split(':').map(Number);
+  const msg=state.messages[position];const options=msg?.creativeOptions||extractCreativeOptions(msg?.body);
+  const chosen=options?.find(x=>x.number===number);if(!chosen)return;
+  const selection='I choose option '+number+': '+chosen.title+'. Please develop this exact idea into an insightful 30-second reel script with a strong hook, useful buyer insight, natural CTA and simple phone-filming plan. Keep this chosen idea as the context for subsequent revisions.';
+  send(selection,{number,title:chosen.title});return
+ }
+ if(t.dataset.follow){send(t.dataset.follow);return}if(t.dataset.copy!==undefined){const m=state.messages[Number(t.dataset.copy)];if(m)await navigator.clipboard.writeText(m.body);t.textContent='Copied';return}if(t.dataset.save!==undefined){const m=state.messages[Number(t.dataset.save)],p=currentProject();if(!m)return;try{const r=await request('create',{kind:'idea',content:{body:m.body,hook:m.body.split('\n')[0],project:p.name,created:now()}});state.saved.unshift(r.item);t.textContent='Saved ✓'}catch{t.textContent='Could not save'}return}if(t.dataset.draftCopy){const d=findSaved(t.dataset.draftCopy);if(d)await navigator.clipboard.writeText(d.content?.body||d.content?.script||'');t.textContent='Copied';return}if(t.dataset.draftUse){const d=findSaved(t.dataset.draftUse);if(d){state.drawer=null;state.messages.push({me:false,body:d.content?.body||d.content?.script||'',type:'saved'});persistThread();render()}return}if(t.dataset.draftDelete){try{await request('delete',{id:t.dataset.draftDelete});state.saved=state.saved.filter(x=>x.id!==t.dataset.draftDelete);state.plans=state.plans.filter(x=>x.id!==t.dataset.draftDelete);renderDrawer()}catch{alert('Could not delete draft')}return}}
+async function send(preset,selectedOption=null){
  const field=$('message-input'),q=toText(preset||field?.value);if(!q||state.loading)return;
  const thread=state.threadId;state.loading=true;
  state.messages.push({me:true,body:q});
@@ -230,8 +253,8 @@ async function send(preset){
  state.messages.push({me:false,body:'',pending:true});
  renderMessages();renderTags();
  try{
-   const res=await request('chat',{question:q,messages:history});
-   if(state.threadId===thread)state.messages[state.messages.length-1]={me:false,body:res.text||'No response returned.',sources:res.sources||[],engine:res.engine||'verified_rules'};
+   const res=await request('chat',{question:q,messages:history,selected_option:selectedOption});
+   if(state.threadId===thread)state.messages[state.messages.length-1]={me:false,body:res.text||'No response returned.',sources:res.sources||[],creativeOptions:res.creative_options||[],engine:res.engine||'verified_rules'};
  }catch(e){
    if(state.threadId===thread)state.messages[state.messages.length-1]={me:false,body:'The knowledge service is temporarily unavailable. Please retry. I cannot verify project facts offline.'};
  }finally{
