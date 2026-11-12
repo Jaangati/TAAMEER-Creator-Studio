@@ -338,3 +338,11 @@
 .reference-card-compact .reference-platform{z-index:2}
 .reference-card-compact .reference-actions{margin-top:5px;padding-top:12px}
 @media(max-width:800px){.reference-card-compact .reference-thumb-compact{aspect-ratio:16/9}}
+
+/* Standard TikTok video embedding: 325 × 578 portrait player within each card */
+.reference-card:has(.reference-thumb-player){width:100%}
+.reference-thumb-player{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;aspect-ratio:325 / 578;background:#fff;min-height:0}
+.reference-thumb-player iframe{display:block;position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
+.reference-card:has(.reference-thumb-player) .reference-info{padding:15px 17px}
+.reference-card:has(.reference-thumb-player) .reference-info p{font-size:11px}
+@media(max-width:800px){.reference-thumb-player{aspect-ratio:325 / 578}}
