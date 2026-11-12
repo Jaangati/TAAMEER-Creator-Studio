@@ -237,3 +237,12 @@
 .answer-source:hover{background:#eaedf0;border-color:#c8cdd4;color:#272b30}
 .source-index{color:#66727e;font-weight:750}
 .thinking-dots{display:inline-block;color:#8d949c;font-size:12px;margin-top:8px}
+
+/* Interactive choices: select an assistant idea without rewriting its title */
+.creative-choices{margin:17px 0 12px;padding:14px;border:1px solid #e3e6ea;border-radius:14px;background:#fcfcfd}
+.choice-heading{font-size:10px;font-weight:750;color:#838a92;letter-spacing:.035em;margin:0 0 11px}
+.choice-button{display:flex;align-items:center;gap:12px;border:1px solid #e7eaed;border-radius:10px;background:#fff;width:100%;margin:7px 0;padding:11px 13px;text-align:left;color:#484e56;font-size:12px;line-height:1.6}
+.choice-button:hover,.choice-button:focus-visible{border-color:#9ea5ae;background:#f5f6f8}
+.choice-number{display:grid;place-items:center;width:24px;height:24px;flex:none;border:1px solid #dce0e5;background:#f2f3f5;border-radius:8px;font-weight:750;color:#4c535b}
+.choice-arrow{margin-left:auto;color:#a2a7ad;font-size:14px}
+@media(max-width:620px){.creative-choices{padding:9px}.choice-button{padding:9px;font-size:11px;gap:9px}}
