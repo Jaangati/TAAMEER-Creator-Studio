@@ -199,7 +199,7 @@ function extractCreativeOptions(body){
 function renderMessages(){
  const target=$('messages');if(!target)return;
  if(!state.messages.length){
- target.innerHTML='<div class="empty"><div class="empty-mark"><img src="'+mark+'" alt="TAAMEER"></div><h1>What shall we film today?</h1><p>Pick a video idea. I'll write the exact script you can say on camera, then help you make it sound like you.</p><div class="suggestions">'+[
+ target.innerHTML='<div class="empty"><div class="empty-mark"><img src="'+mark+'" alt="TAAMEER"></div><h1>What shall we film today?</h1><p>Pick a video idea. I can write the exact script you can say on camera, then help you make it sound like you.</p><div class="suggestions">'+[
  ['Give me reel ideas','Suggest four informative real estate reel ideas for a sales agent'],
  ['Write me a script','Write me a natural spoken 30-second reel script for a Qatar real estate agent'],
  ['I am at the showroom','Suggest four reel ideas I can film in the showroom today']
