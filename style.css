@@ -18,7 +18,7 @@
 .login-right summary{cursor:pointer}.login-right details input{margin:5px 0}
 .primary{border:1px solid #242831;color:#fff;background:#242831;border-radius:11px;padding:14px 18px;font-size:13px;font-weight:700;transition:background .2s}.primary:hover{background:#3b404b}
 .secondary{border:1px solid #e0e3e7;color:#4b5057;background:white;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;transition:background .2s}.secondary:hover{background:#f5f6f8}
-.notice{background:#fff6ed;color:#a05c2f;padding:11px 13px;border-radius:10px;font-size:12px;margin-top:13px}
+.notice{background:#f0f1f3;color:#575d65;padding:11px 13px;border-radius:10px;font-size:12px;margin-top:13px}
 .hide{display:none!important}.badge{font-size:10px;color:#616874;background:#f1f2f4;border:1px solid #e3e5e9;border-radius:99px;padding:6px 11px;white-space:nowrap}
 .app{display:flex;height:100dvh;min-height:580px;background:#fff;overflow:hidden}
 .side{width:255px;flex:none;border-right:1px solid #eaeced;background:#fafafa;display:flex;flex-direction:column;padding:22px 13px 18px;gap:19px}
