@@ -72,12 +72,17 @@ function answer(q){
  const reviewRequest=/review|check my|critique|feedback|improve my script|rate my/i.test(t);
  const shorter=/shorter|shorten|too long|concise|less words|15[ -]?sec|اختصر/i.test(t);
  const longer=/longer|expand|more detail|more detailed|60[ -]?sec/i.test(t);
- const rewrite=/rewrite|rephrase|another version|different version|change the hook|stronger hook|catchier|more catchy|more sales|more engaging|less formal|more natural|more emotional|negative hook/i.test(t);
+ const rewrite=/rewrite|rephrase|another version|different version|change the hook|stronger hook|catchier|more catchy|more sales|more engaging|less formal|more natural|more emotional|negative hook|more human|sound human|more conversational|make it better/i.test(t);
  const follow=/^(more|another|again|one more|different|option\s*[2-9]|number\s*[2-9]|the second|the third|that one|this one|do it|yes|go ahead)[.! ]*$/i.test(t);
  const chosen=Number(t.match(/(?:option|number|idea)\s*([1-9])/)?.[1]||(t==='the second'?'2':t==='the third'?'3':'0'));
  let body='',type='general';
  const smooth=(s)=>s.replace(/\bVIDEO CONCEPT\b/g,'Your reel').replace(/\bFRESH REEL IDEAS\b/g,'Ideas you can film');
- if(greeting){body='Hey! What are we creating today? Tell me the project, your audience, or just where you are filming and I’ll suggest something practical.';type='chat'}
+ if(chosen&&/turn|make|write|develop|expand|script|film/i.test(t)&&/idea|option|number/i.test(t)){
+  type='script';
+  const selected=previousText.split('\n').find(line=>new RegExp('^\\s*'+chosen+'\\.').test(line));
+  const hook=selected?.replace(/^\s*\d+\.\s*/,'')||chooseHook(contextProject,chosen);
+  body='Absolutely — let’s develop option '+chosen+' into a reel.\n\nHOOK (0–5 SECONDS)\n'+hook+'\n\nMAIN POINT (5–22 SECONDS)\n'+safeFact(contextProject)+' Explain why this matters to the buyer.\n\nCLOSING\n“What matters most to you? Message me and let’s explore the options.”\n\nFILM IT\nStart talking to camera, show the project model or approved location footage, and finish looking at the camera.\n\nWant a bolder opening or a shorter version?';
+ }else if(greeting){body='Hey! What are we creating today? Tell me the project, your audience, or just where you are filming and I’ll suggest something practical.';type='chat'}
  else if(acknowledgement){body='Glad that works. Want to turn it into a short filming script, explore another angle, or get a shot-by-shot plan?';type='chat'}
  else if(/^(what can you do|help|how does this work|who are you)/i.test(t)){body='I’m your TAAMEER content coach. I can help you think of useful real estate reels, structure scripts, improve hooks, review drafts, plan simple phone shoots, and check approved project facts.\n\nYou can also tell me “make it shorter,” “try another angle,” or “turn idea 2 into a script.” I’ll follow our conversation. I use TAAMEER’s prepared content rules and project information, so I won’t make up facts I don’t have.';type='chat'}
  else if(/\b(available|how much|price|payment|roi|handover|yield|discount|units left)\b/i.test(t)&&!/(script|reel|idea|hook|caption|write)/i.test(t)){body='I can help you explain '+p.name+' accurately, but I don’t have live availability, pricing or payment-plan confirmation here. Please check the latest Marketing/Sales approvals first.\n\nWould you like a video idea that highlights its verified location or explains the questions buyers should ask?';type='facts'}
