@@ -198,10 +198,37 @@ function verifiedThumbnail(url){
  if(!url)return '';
  try{const u=new URL(url);return u.protocol==='https:'&&['p16-sign.tiktokcdn-us.com','p16-sign-va.tiktokcdn.com','p19-sign.tiktokcdn-us.com','p16-sign-sg.tiktokcdn.com','www.tiktok.com','images.unsplash.com'].includes(u.hostname)?u.href:''}catch{return ''}
 }
+const referenceTagMeta={
+ 'Indoor':{icon:'▣',tone:'neutral'},
+ 'Outdoor':{icon:'☀',tone:'blue'},
+ 'Showroom':{icon:'⌂',tone:'gold'},
+ 'Site Visit':{icon:'⌖',tone:'green'},
+ 'Solo / Self-Filmed':{icon:'◉',tone:'charcoal'},
+ 'Cameraperson':{icon:'▣',tone:'blue'},
+ 'Tripod':{icon:'▴',tone:'neutral'},
+ 'POV / Handheld':{icon:'▧',tone:'violet'},
+ 'Screen Demo':{icon:'▤',tone:'pink'},
+ 'Voiceover':{icon:'♫',tone:'indigo'},
+ 'Advice':{icon:'✦',tone:'amber'},
+ 'Tips & Tricks':{icon:'✳',tone:'lime'},
+ 'Property Tour':{icon:'⌂',tone:'cyan'},
+ 'Sales Video':{icon:'↗',tone:'coral'},
+ 'Educational':{icon:'◈',tone:'teal'},
+ 'Location / Area':{icon:'⌖',tone:'orange'},
+ 'Easy':{icon:'✓',tone:'green'},
+ 'Moderate':{icon:'ϟ',tone:'orange'},
+ 'Advanced':{icon:'◈',tone:'red'}
+};
+function referenceTagHtml(name,isFilter=false){
+ const t=referenceTagMeta[name]||{icon:'•',tone:'neutral'};
+ const tagName=esc(name),color='tag-'+t.tone;
+ const icon='<span class="ref-tag-icon" aria-hidden="true">'+esc(t.icon)+'</span>';
+ return isFilter?'<button class="reference-filter ref-tag '+color+(referenceTag===name?' active':'')+'" data-reference-tag="'+tagName+'">'+icon+'<span>'+tagName+'</span></button>':'<span class="ref-tag '+color+'">'+icon+'<span>'+tagName+'</span></span>';
+}
 function renderReferenceLibrary(){
  const area=$('messages');if(!area)return;
  const tags=['All',...new Set(reelReferences.flatMap(r=>r.tags||[]))];
- area.innerHTML='<section class="references-page"><div class="references-heading"><div><p class="module-kicker">TAAMEER MARKETING CURATION</p><h1>Reel Reference Library</h1><p>Short, practical reels selected by TAAMEER Marketing. Explore the filming setup, content format and creative approach, then make your own version.</p></div><span class="reference-count">'+reelReferences.length+' references</span></div><div class="reference-toolbar"><label class="reference-search">⌕ <input id="reference-search" type="search" aria-label="Search references" placeholder="Search references, tags or formats…" value="'+esc(referenceSearch)+'"></label><div class="reference-filters">'+tags.map(t=>'<button class="reference-filter '+(referenceTag===t?'active':'')+'" data-reference-tag="'+esc(t)+'">'+esc(t)+'</button>').join('')+'</div></div><div class="reference-results" id="reference-results"></div><div class="reference-footnote">Shared by TAAMEER Group Marketing Department. Examples are for creative study; adapt the approach, not another creator\'s exact wording or footage.</div></section>';
+ area.innerHTML='<section class="references-page"><div class="references-heading"><div><p class="module-kicker">TAAMEER MARKETING CURATION</p><h1>Reel Reference Library</h1><p>Short, practical reels selected by TAAMEER Marketing. Explore the filming setup, content format and creative approach, then make your own version.</p></div><span class="reference-count">'+reelReferences.length+' references</span></div><div class="reference-toolbar"><label class="reference-search">⌕ <input id="reference-search" type="search" aria-label="Search references" placeholder="Search references, tags or formats…" value="'+esc(referenceSearch)+'"></label><div class="reference-filters">'+tags.map(t=>t==='All'?'<button class="reference-filter '+(referenceTag==='All'?'active':'')+'" data-reference-tag="All">All</button>':referenceTagHtml(t,true)).join('')+'</div></div><div class="reference-results" id="reference-results"></div><div class="reference-footnote">Shared by TAAMEER Group Marketing Department. Examples are for creative study; adapt the approach, not another creator\'s exact wording or footage.</div></section>';
  const input=$('reference-search');if(input)input.oninput=ev=>{referenceSearch=ev.target.value;renderReferenceCards()};
  renderReferenceCards();
 }
@@ -218,7 +245,7 @@ function renderReferenceCards(){
   const image=thumb?'<img loading="lazy" alt="Original reel cover image" src="'+esc(thumb)+'">':'<span class="reference-graphic"><span class="reference-graphic-icon">▶</span><small>OPEN ORIGINAL VIDEO</small></span>';
   const media=validTikTokId?'<div class="reference-thumb reference-thumb-player"><iframe height="578" width="325" src="https://www.tiktok.com/player/v1/'+videoId+'?music_info=1&description=1&autoplay=1&muted=1&embed_from=embed_page" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="'+esc(r.title)+'" allowfullscreen loading="lazy"></iframe></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
   const detail=r.description&& !/original tiktok video reference shared by/i.test(r.description)?r.description:'A reference selected by TAAMEER Marketing. Open the original video to see the format and filming style.';
-  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">SELECTED REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a></div></div></article>';
+  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">SELECTED REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a></div></div></article>';
  }).join(''):'<p class="references-empty">No references match your search or selected tag.</p>';
 }
 function safeSource(url){try{const u=new URL(url);return u.protocol==="https:"&&/^(?:[\w-]+\.)*(?:gov\.qa|lusail\.com|qetaifanprojects\.com|udcqatar\.com|thepeninsulaqatar\.com)$/.test(u.hostname)?u.href:""}catch{return ""}}
