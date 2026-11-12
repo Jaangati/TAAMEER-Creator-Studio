@@ -270,7 +270,7 @@ function resetTikTokPlayer(host){
  const link=reelReferences.find(x=>x.tiktok_video_id===videoId)?.url||'https://www.tiktok.com/';
  host.dataset.loaded='false';
  host.classList.remove('is-playing');
- host.innerHTML='<div class="reference-loading-poster"><span class="reference-loading-play">▶</span><strong>Play reel</strong><small>Loads only when you choose to watch</small><a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">Open on TikTok ↗</a></div>';
+ host.innerHTML='<div class="reference-loading-poster"><button class="reference-play-btn" data-play-video="'+videoId+'" aria-label="Play TikTok reel"><span class="reference-loading-play">▶</span><strong>Play reel</strong><small>Tap to load TikTok video</small></button><a href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">Open on TikTok ↗</a></div>';
 }
 function setupProgressiveReelPlayers(){
  // No autoplay, no scroll-triggered iframes, no observer — explicit user action only.
