@@ -1,40 +1,46 @@
-# TAAMEER Reel Reference Library
+# TAAMEER Agents Studio — Reel Reference Curation
 
-This is a **Marketing-curated inspiration bank**, not a separate content-creation tool.
+The Reel Reference Library contains **Marketing-selected inspiration videos**, not videos waiting for a second approval inside the dashboard.
 
-## How it works
+## Workflow when Marketing sends a link in chat
 
-1. Marketing sends a TikTok / Instagram / YouTube / other public reel URL in a ChatGPT conversation and asks for it to be added to the Reference Library.
-2. Inspect the original reel where tool access permits. Extract verified title/creator, format, hook approach, practical shooting difficulty, educational angle, approximate duration and a publicly accessible thumbnail URL where available. **Never invent footage, thumbnails, titles, creators or filming characteristics.**
-3. Normalize the entry and add/update it in `references/reels.json` through the GitHub connector, using a stable URL-derived ID. Avoid duplicates.
-4. Tag by *verified content*, selecting from e.g. `Direct to Camera`, `POV`, `Voiceover`, `Showroom`, `Location Walkthrough`, `Buyer Education`, `Personal Branding`, `Hook Inspiration`, `Storytelling`, `Simple Smartphone Shoot`. Do not add these tags without viewing content.
-5. Set `review_status` to `reviewed` only when the reel was actually inspected; otherwise keep `pending_review`, leave any unconfirmed metadata blank and explain the limitation.
-6. Commit the JSON change. GitHub Pages automatically publishes the revised reference cards, without agent edits or dashboard data entry.
+1. **Inspect first**: Follow the original post, examine available video footage and creator metadata. Do not invent visual details if the footage is inaccessible. Where possible use creator-provided captions or verified official embed metadata; distinguish metadata from visual inspection.
+2. **Prepare a preview card here in chat**, before changing the deployed library. Include the original link, verified creator, suggested title, concise reason it is useful to sales agents, and an assessment of production difficulty.
+3. **Classify using evidence**, not assumptions:
+   - **Environment**: Indoor, Outdoor, Showroom, Construction Site, Site Visit, Office, Mixed.
+   - **Camera setup**: Self-Filmed / Solo, Tripod, Cameraperson, POV, Screen Recording, Voiceover, Mixed.
+   - **Content type**: Tips & Tricks, Buyer Advice, Sales Video, Educational, Property Tour, Location Tour, Project Update, Market Insight, Storytelling, Lifestyle, Q&A.
+   - **Difficulty**: Easy (phone only), Moderate, Advanced; optionally note whether editing is required.
+   - **Format and hook**: Talking to Camera, Walk-and-Talk, Green Screen, Montage, Before/After, Interview, Text Overlay, etc., only when observed.
+   - Include a genuine thumbnail from an authorized/official media URL where available; otherwise explain the preview limitation, without inventing a still.
+4. **Show the proposed entry to Marketing and wait for explicit confirmation** such as “add it,” “approved,” or “publish.” Do not commit new references to the repository before that approval in this chat.
+5. **After confirmation, publish**: Add the verified record to `references/reels.json` using the GitHub connector; deduplicate by canonical video ID/URL and retain verified metadata.
+6. The deployed website loads that JSON file. Existing references are already published; lack of an analyzed tag is not a publication problem.
 
-## Entry schema
+## Metadata schema
 
 ```json
 {
-  "id": "unique-public-id",
+  "id": "stable-video-id",
+  "url": "https://www.tiktok.com/@creator/video/1234567890",
   "platform": "TikTok",
-  "url": "https://vt.tiktok.com/example/",
-  "title": "Verified descriptive title",
-  "description": "Why this is a useful filming reference",
+  "creator": "@creator",
+  "title": "Reviewed short title",
+  "description": "Why an agent should study this reel",
   "thumbnail_url": null,
-  "creator": null,
-  "duration_seconds": null,
-  "tags": ["Direct to Camera", "Buyer Education"],
-  "review_status": "reviewed",
+  "tiktok_video_id": "1234567890",
+  "publication_status": "published",
+  "analysis_status": "analyzed",
+  "filming_environment": "Indoor",
+  "camera_setup": "Self-Filmed / Solo",
+  "content_type": "Buyer Advice",
   "difficulty": "Easy · smartphone only",
-  "format": "Direct-to-camera",
-  "creative_notes": "How a TAAMEER agent can adapt the technique using original wording and approved facts",
-  "added_on": "2026-11-12",
-  "source": "Marketing submission"
+  "format": "Talking to Camera",
+  "tags": ["Indoor", "Self-Filmed / Solo", "Buyer Advice", "Tips & Tricks", "Easy · smartphone only"],
+  "creative_notes": "How to adapt the format with original wording and accurate TAAMEER information"
 }
 ```
 
-Only use `reviewed` and concrete tags if the original has been inspected. When a TikTok short link cannot be resolved, keep the source URL as-is and use a branded preview placeholder. Never download or redistribute another creator's footage without permission. Reference cards link to the creator's original post.
+If footage cannot be inspected, leave `analysis_status="not_yet_analyzed"`, set unverified filming classification fields to null and keep `tags=[]`. This status is **internal analysis metadata**, not a user-facing approval requirement. The website should never show “Awaiting approval,” “Pending review,” or similar labels.
 
-## Publishing
-
-The GitHub Pages workflow copies `references/` into the deployed static site. Frontend loads `references/reels.json` with `cache: no-store` and supports searching and filtering by tags. To add references, only update the repository JSON; no frontend code change is required.
+Do not copy another creator's footage or script. Link the original and encourage agents to adapt the concept and filming technique in their own words.
