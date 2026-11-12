@@ -1,0 +1,35 @@
+name: Inspect public reel cover metadata
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-reel-cover-sources.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check cover metadata endpoints for a single public reference
+        run: |
+          python - <<'PY'
+          import urllib.request,json,urllib.parse
+          video='https://www.tiktok.com/@hossam_allam__/video/7660660373145586962'
+          endpoints=[
+            ('tikwm','https://www.tikwm.com/api/?url='+urllib.parse.quote(video,safe='')),
+            ('tikwm_no_www','https://tikwm.com/api/?url='+urllib.parse.quote(video,safe='')),
+            ('tiktok_oembed','https://www.tiktok.com/oembed?url='+urllib.parse.quote(video,safe=''))
+          ]
+          for label,url in endpoints:
+            try:
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0','Accept':'application/json'})
+              with urllib.request.urlopen(req,timeout=12) as response:
+                d=json.load(response)
+              item=d.get('data') if isinstance(d,dict) else None
+              cover=item.get('cover') if isinstance(item,dict) else None
+              origin=item.get('origin_cover') if isinstance(item,dict) else None
+              thumbnail=d.get('thumbnail_url') if isinstance(d,dict) else None
+              print('CHECK',label,'RESULT',str(d.get('code') if isinstance(d,dict) else '?'),'COVER',str(cover)[:220],'ORIGIN',str(origin)[:160],'THUMBNAIL',str(thumbnail)[:220],flush=True)
+            except Exception as e:print('CHECK',label,'FAILED',str(e)[:180],flush=True)
+          PY
