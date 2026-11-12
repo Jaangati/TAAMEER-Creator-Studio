@@ -303,7 +303,7 @@ function renderReferenceCards(){
   const image=thumb?'<img loading="lazy" alt="Original reel cover image" src="'+esc(thumb)+'">':'<span class="reference-graphic"><span class="reference-graphic-icon">▶</span><small>Preview loads when visible</small></span>';
   const media=validTikTokId?'<div class="reference-thumb reference-thumb-player reference-player-waiting" data-video-id="'+esc(videoId)+'" data-title="'+esc(r.title)+'"><div class="reference-loading-poster"><span class="reference-loading-play">▶</span><small>Loading TikTok preview…</small><a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Open original ↗</a></div></div>':'<a class="reference-thumb reference-thumb-compact" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" aria-label="Open '+esc(r.title)+'">'+image+'<span class="reference-platform">'+esc(r.platform||'Video')+'</span></a>';
   const detail=r.description&& !/original tiktok video reference shared by/i.test(r.description)?r.description:'A TAAMEER Marketing reference. Open the original reel to explore its format and filming style.';
-  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a></div></div></article>';
+  return'<article class="reference-card reference-card-compact">'+media+'<div class="reference-info"><div class="reference-card-meta">REEL REFERENCE</div><h2>'+esc(r.title)+'</h2>'+(r.creator?'<div class="reference-creator">'+esc(r.creator)+'</div>':'')+'<p>'+esc(detail)+'</p>'+(r.tags?.length?'<div class="reference-tags">'+r.tags.map(t=>referenceTagHtml(t)).join('')+'</div>':'')+'<div class="reference-actions"><a class="reference-open" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">Watch on TikTok <span>↗</span></a>'+(validTikTokId?'<button class="reference-retry" data-reload-video="'+videoId+'" title="Reload the TikTok embed if it fails">↻ Reload video</button>':'')+'</div></div></article>';
  }).join(''):'<p class="references-empty">No references match your search or selected tag.</p>';
  setupProgressiveReelPlayers();
 }
@@ -352,6 +352,11 @@ function renderDrawer(){const target=$('drawer-root');if(!target)return;if(!stat
 function findSaved(id){return [...state.saved,...state.plans].find(x=>x.id===id)}
 async function clickHandler(e){const t=e.target.closest('button');if(!t)return;const a=t.dataset.action;if(a==='new'){newThread();return}
  if(a==='toggle-right'){const app=root.querySelector('.app');app?.classList.toggle('right-closed');chatPanelOpen=!app?.classList.contains('right-closed');return}
+ if(t.dataset.reloadVideo){
+  const target=document.querySelector('.reference-thumb-player[data-video-id="'+t.dataset.reloadVideo+'"]');
+  if(target){target.dataset.loaded='false';target.dataset.queued='false';target.replaceChildren();scheduleTikTokPlayer(target);}
+  return
+ }
  if(t.dataset.module){activeModule=t.dataset.module;render();return}
  if(t.dataset.referenceTag){referenceTag=t.dataset.referenceTag;renderReferenceLibrary();return}
  if(t.dataset.askProject){state.project=t.dataset.askProject;activeModule='brain';render();send('Tell me about '+currentProject().name+' and suggest a useful reel idea');return}
