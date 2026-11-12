@@ -1,4 +1,4 @@
-# TAAMEER Agent Studio
+# TAAMEER Agents Studio
 
 An internal, browser-based sales content workspace designed by TAAMEER Marketing.
 
